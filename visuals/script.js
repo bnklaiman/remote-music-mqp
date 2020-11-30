@@ -16,7 +16,7 @@ const LIFESPAN = 3;
 let shapes = [];
 
 // music init
-let notes = ["C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"];
+let notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 let noteColor = ["#FF0000", "#FF8000", "#FFFF00", "#80FF00", "#00FF00", "#00FF80", "#00FFFF", "#0080FF", "#0000FF", "#8000FF", "#FF00FF", "#FF0080"]
 
 // all keys
@@ -157,18 +157,18 @@ function repeatChar(count, char) {
 
 function getNoteName(note) {
 	switch (note) {
-		case 0:  return "C4";  break;
-		case 1:  return "C#4"; break;
-		case 2:  return "D4";  break;
-		case 3:  return "D#4"; break;
-		case 4:  return "E4";  break;
-		case 5:  return "F4";  break;
-		case 6:  return "F#4"; break;
-		case 7:  return "G4";  break;
-		case 8:  return "G#4"; break;
-		case 9:  return "A4";  break;
-		case 10: return "A#4"; break;
-		case 11: return "B4";  break;
+		case 0:  return "C";  break;
+		case 1:  return "C#"; break;
+		case 2:  return "D";  break;
+		case 3:  return "D#"; break;
+		case 4:  return "E";  break;
+		case 5:  return "F";  break;
+		case 6:  return "F#"; break;
+		case 7:  return "G";  break;
+		case 8:  return "G#"; break;
+		case 9:  return "A";  break;
+		case 10: return "A#"; break;
+		case 11: return "B";  break;
 		default: return "error"; break;
 	}
 }
@@ -228,7 +228,7 @@ class Shape {
 			case 55: case 85: case 74: case 77:
 				this.note = getNoteName(currentKey[6]); break;
 			default:
-				this.note = "C4";
+				this.note = "C";
 		}
 		this.timeAlive = 0;
 	}
@@ -236,18 +236,18 @@ class Shape {
 	display() {
 		let color;
 		switch (this.note) {
-			case "C4":  color = "#FF0000"; break;
-			case "C#4": color = "#FF8000"; break;
-			case "D4":  color = "#FFFF00"; break;
-			case "D#4": color = "#80FF00"; break;
-			case "E4":  color = "#00FF00"; break;
-			case "F4":  color = "#00FF80"; break;
-			case "F#4": color = "#00FFFF"; break;
-			case "G4":  color = "#0080FF"; break;
-			case "G#4": color = "#0000FF"; break;
-			case "A4":  color = "#8000FF"; break;
-			case "A#4": color = "#FF00FF"; break;
-			case "B4":  color = "#FF0080"; break;
+			case "C":  color = "#FF0000"; break;
+			case "C#": color = "#FF8000"; break;
+			case "D":  color = "#FFFF00"; break;
+			case "D#": color = "#80FF00"; break;
+			case "E":  color = "#00FF00"; break;
+			case "F":  color = "#00FF80"; break;
+			case "F#": color = "#00FFFF"; break;
+			case "G":  color = "#0080FF"; break;
+			case "G#": color = "#0000FF"; break;
+			case "A":  color = "#8000FF"; break;
+			case "A#": color = "#FF00FF"; break;
+			case "B":  color = "#FF0080"; break;
 			default:    color = "#FFFFFF"; break;
 		}
 		polygon(this.x, this.y, this.radius, this.scale, this.npoints, color);
