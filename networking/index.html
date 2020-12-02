@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="styles.css" />
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>MQP MVP PROJECT</title>
+	</head>
+	<body onload="onPageLoaded()">
+		<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
+
+		<script>
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+				apiKey: 'AIzaSyCFRvUqmFquPehn-VWKzOxpU76AOJqSUPM',
+				authDomain: 'group-music-test.firebaseapp.com',
+				databaseURL: 'https://group-music-test.firebaseio.com',
+				projectId: 'group-music-test',
+				storageBucket: 'group-music-test.appspot.com',
+				messagingSenderId: '1036036993111',
+				appId: '1:1036036993111:web:d3c0003dd545b027d87312'
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+		</script>
+
+		<script src="./index.js"></script>
+
+		<script>
+			window.addEventListener('beforeunload', event => {
+				console.log('Goodbye');
+			});
+		</script>
+
+		<!-- Step 1: Create a Room, or Join One -->
+
+		<button type="button" id="createRoom" onclick="openForm(true)">
+			Create a Band!
+		</button>
+		<button type="button" id="joinRoom" onclick="openForm(false)">
+			Join a Band!
+		</button>
+
+		<!-- Step 2A: If creating, pick a band name, user name and password -->
+		<!-- Step 2A: If joining, pick a band name, user name and password -->
+		
+		<form id="bandInfo">
+			<h1 id = joinChoice></h1>
+			<label for="name">Name:</label>
+            <input type="text" id="name" name="name" value=""/><br/>
+
+            <label for="band">Band:</label>
+            <input type="text" id="band" name="band" value=""/><br/>
+
+            <label for="passcode">Passcode:</label>
+            <input type="text" id="passcode" name="passcode" value=""/>
+            
+            <br/><br/>
+            <button type="button" onclick = "enterRoom()">Let's Go!</button>
+            <p id = "errorRoom">This room is taken, full, or just isn't working out</p>
+		</form>
+
+		<!-- Step 3: Show member name, role, and other band members -->
+		<div id = "mainRoom">
+			<h1 id="info">info loading...</h1>
+			<h2 id="instrument">role loading...</h2>
+			<br/><br/>
+			
+			<h3 id = "allMembers">members list loading...</h3>
+			<button type="button" onclick = "displayMembers()">Pull Database</button>
+		</div>
+	</body>
+</html>

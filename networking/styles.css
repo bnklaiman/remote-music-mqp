@@ -1,0 +1,15 @@
+#bandInfo{
+    display: none;
+}
+#mainRoom, #errorRoom, #joinChoice{
+    display: none;
+}
+
+body{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+button{
+    font-size: 20px;
+}
