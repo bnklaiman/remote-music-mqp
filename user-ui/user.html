@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>User End</title>
+		<style>
+			html {
+				padding: 1%;
+			}
+
+			#note-grid, .note-cell {
+				margin: auto;
+				border: 1px solid black;
+			}
+
+			#note-palette {
+				margin-right: 2px;
+			}
+
+			.palette-cell {
+				box-shadow: 0 1px 3px rgba(0,0,0,0.24), 0 1px 2px rgba(0,0,0,0.48);
+				transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+			}
+
+			.palette-cell:hover {
+				box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+			}
+
+			canvas {
+				height: 100px;
+				width: 100px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<table id="note-grid">
+			<tr>
+				<td class="note-cell"><canvas id="canvas0"</canvas></td>
+				<td class="note-cell"><canvas id="canvas1"></canvas></td>
+				<td class="note-cell"><canvas id="canvas2"></canvas></td>
+				<td class="note-cell"><canvas id="canvas3"></canvas></td>
+				<td class="note-cell"><canvas id="canvas4"></canvas></td>
+				<td class="note-cell"><canvas id="canvas5"></canvas></td>
+				<td class="note-cell"><canvas id="canvas6"></canvas></td>
+				<td class="note-cell"><canvas id="canvas7"></canvas></td>
+			</tr>
+		</table>
+		<p>Volume:</p>
+		<input id="volume" type="range" min="10" max="75" value="38">
+		<table id="note-palette">
+			<tr>
+				<td class="palette-cell"><canvas id="palette0" onclick="input0()"></canvas></td>
+				<td class="palette-cell"><canvas id="palette1" onclick="input1()"></canvas></td>
+			</tr>
+			<tr>
+				<td class="palette-cell"><canvas id="palette2" onclick="input2()"></canvas></td>
+				<td class="palette-cell"><canvas id="palette3" onclick="input3()"></canvas></td>
+				<td class="palette-cell"><canvas id="palette4" onclick="input4()"></canvas></td>
+			</tr>
+			<tr>
+				<td class="palette-cell"><canvas id="palette-rest" onclick="inputRest()"></canvas></td>
+				<td class="palette-cell"><canvas id="palette5" onclick="input5()"></canvas></td>
+				<td class="palette-cell"><canvas id="palette6" onclick="input6()"></canvas></td>
+			</tr>
+		</table>
+		<button type="button" onclick="resetCells()">Reset Cells</button>
+		<script src="canvas.js"></script>
+	</body>
+</html>
