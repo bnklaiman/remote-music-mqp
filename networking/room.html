@@ -7,7 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>MQP PROJECT</title>
 	</head>
-	<body onload="onPageLoaded()">
+	<body onload="onRoomLoaded()">
 		<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
 		<!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -38,34 +38,20 @@
 		</script>
 
 		<!-- Step 1: Create a Room, or Join One -->
-
-		<button type="button" id="createRoom" onclick="openForm(true)">
-			Create a Band!
-		</button>
-		<button type="button" id="joinRoom" onclick="openForm(false)">
-			Join a Band!
-		</button>
-
 		<!-- Step 2A: If creating, pick a band name, user name and password -->
 		<!-- Step 2A: If joining, pick a band name, user name and password -->
-		
-		<form id="bandInfo">
-			<h1 id = joinChoice></h1>
-			<label for="name">Name:</label>
-            <input type="text" id="name" name="name" value=""/><br/>
-
-            <label for="band">Band:</label>
-            <input type="text" id="band" name="band" value=""/><br/>
-
-            <label for="passcode">Passcode:</label>
-            <input type="text" id="passcode" name="passcode" value=""/>
-            
+        <!-- Step 3: Show member name, role, and other band members -->
+        <div id = "mainRoom">
+            <h1 id="info">info loading...</h1>
+            <h2 id="instrument">role loading...</h2>
             <br/><br/>
-            <button type="button" onclick = "enterRoom()">Let's Go!</button>
-            <p id = "errorRoom">This room is taken, full, or just isn't working out</p>
-		</form>
-
-		<!-- Step 3: Show member name, role, and other band members -->
+            
+            <h3 id = "allMembers">members list loading...</h3>
+            <button type="button" onclick = "displayMembers()">Pull Database</button>
+        </div>
 		
 	</body>
 </html>
+
+
+

@@ -1,7 +1,7 @@
 #bandInfo{
     display: none;
 }
-#mainRoom, #errorRoom, #joinChoice{
+#errorRoom, #joinChoice{
     display: none;
 }
 
