@@ -132,6 +132,7 @@ let pContextR = paletteRest.getContext("2d");
 let pCenterWR = paletteRest.width;
 let pCenterHR = paletteRest.height;
 
+// cell grid init
 let cell0Filled = false;
 let cell1Filled = false;
 let cell2Filled = false;
@@ -141,15 +142,7 @@ let cell5Filled = false;
 let cell6Filled = false;
 let cell7Filled = false;
 
-let cell0Type = "";
-let cell1Type = "";
-let cell2Type = "";
-let cell3Type = "";
-let cell4Type = "";
-let cell5Type = "";
-let cell6Type = "";
-let cell7Type = "";
-
+// canvas context scaling
 context0.scale(2, 1);
 context1.scale(2, 1);
 context2.scale(2, 1);
@@ -186,15 +179,6 @@ function resetCells() {
 	cell5Filled = false;
 	cell6Filled = false;
 	cell7Filled = false;
-
-	cell0Type = "";
-	cell1Type = "";
-	cell2Type = "";
-	cell3Type = "";
-	cell4Type = "";
-	cell5Type = "";
-	cell6Type = "";
-	cell7Type = "";
 }
 
 function fillInNoteCell(context, centerX, centerY, radius, color) {
@@ -284,6 +268,7 @@ function processInput(currentColor, inputType) {
 	}
 }
 
+// run one of these when a user selects a note or rest
 function input0() {
 	let currentColor = noteColor[currentKey[0]];
 	processInput(currentColor, "note");
