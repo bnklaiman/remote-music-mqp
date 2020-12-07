@@ -24,17 +24,22 @@ async function setID() {
 		}`;
 }
 
-async function displayMembers() {
+function displayMembers() {
 	//document.getElementById('allMembers').innerHTML = `Member ID: ${memberID}`;
 	db.doc(`Bands/${bandName}`).onSnapshot(function(doc) {
+		console.log("SnapShot activated");
 		db.collection(`Bands/${bandName}/members`).get().then( function(members){
 			let memberslist = members.docs.map(doc => doc.data());
-			console.log(`Global MembersList: ${memberslist}`);
+			//console.log(`Global MembersList: ${memberslist}`);
 			document.getElementById("allMembers").innerHTML = "Your Band: " + bandName + "<br>";
 			
 			memberslist.forEach(function (item, index) {
 				document.getElementById("allMembers").innerHTML += index + ":" + item.userName + "<br>";
-				console.log(index, ' => ', item.userName);
+				//console.log(index, ' => ', item.userName);
+			})
+
+			db.doc(`Bands/${bandName}`).set({//if memberslist is diff from current, snapshot will not rerun
+				members: memberslist.length,
 			})
 		})
 	})
@@ -131,12 +136,14 @@ function enterRoom() {
 				.set({
 					userName: userName
 				})
-		);
-
+		).then(() =>
+			location.href = 'room.html'
+		)
+		
 	//setID();
 	//displayMembers();
 	// document.getElementById('bandInfo').style.display = 'none';
-	location.href = 'room.html';
+	
 	//document.getElementById('mainRoom').style.display = 'block';
 
 }
