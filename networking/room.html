@@ -7,7 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>MQP PROJECT</title>
 	</head>
-	<body onload="onRoomLoaded()">
+	<body onload="onJoinRoom()">
 		<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
 		<!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -44,8 +44,13 @@
         <div id = "mainRoom">
             <h1 id="info">info loading...</h1>
             <h2 id="instrument">role loading...</h2>
-            <br/><br/>
+            <br/>
+
             
+            <button type = "button" id = "hostStart" onclick="beginSong()">Start Song</button>
+            <div id="clockdiv"></div>
+
+
             <h3 id = "allMembers">members list loading...</h3>
             
         </div>
