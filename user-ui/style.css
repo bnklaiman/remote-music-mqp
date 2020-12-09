@@ -3,7 +3,11 @@ html {
 	font-family: 'Raleway', sans-serif;
 }
 
-h1, h4, p, ul, li {
+button, select, input {
+	font-family: 'Raleway', sans-serif;
+}
+
+h1, h3, h4, p, ul, li {
 	color: white;
 	text-align: left;
 }
@@ -30,7 +34,13 @@ h1, h4, p, ul, li {
 	bottom: 250px;
 }
 
-#resetCells {
+#conductor-controls {
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+}
+
+#resetPattern {
 	position: absolute;
 	bottom: 225px;
 }
@@ -38,6 +48,10 @@ h1, h4, p, ul, li {
 .palette-cell {
 	border: 1px solid white;
 	cursor: pointer;
+}
+
+form {
+	color: white;
 }
 
 canvas {

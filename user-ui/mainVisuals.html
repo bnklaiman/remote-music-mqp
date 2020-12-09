@@ -47,8 +47,57 @@
 				<td class="palette-cell" colspan="2"><canvas id="palette-rest" onclick="inputRest()"></canvas></td>
 			</tr>
 		</table>
-		<button id="resetCells" type="button" onclick="resetCells()">Reset Cells</button>
-		<script src="visuals.js"></script>
+		<div id="conductor-controls">
+			<h3>Conductor Controls</h3>
+			<form id="conductorForm" onsubmit="processSongChange()">
+				<label for="conductor-bpm">Set BPM:</label><br>
+				<input type="number" id="conductor-bpm" name="conductor-bpm" required><br>
+				<label for="conductor-key">Set Key:</label><br>
+				<select id="keys" name="keylist" form="keyform" required>
+					<option value="C_MAJOR">C major</option>
+					<option value="A_MINOR">A minor</option>
+					<optgroup label="&flat; major">
+						<option value="F_MAJOR">F major</option>
+						<option value="B_FLAT_MAJOR">B&flat; major</option>
+						<option value="E_FLAT_MAJOR">E&flat; major</option>
+						<option value="A_FLAT_MAJOR">A&flat; major</option>
+						<option value="D_FLAT_MAJOR">D&flat; major</option>
+						<option value="G_FLAT_MAJOR">G&flat; major</option>
+						<option value="C_FLAT_MAJOR">C&flat; major</option>
+					</optgroup>
+					<optgroup label="&flat; minor">
+						<option value="D_MINOR">D minor</option>
+						<option value="G_MINOR">G minor</option>
+						<option value="C_MINOR">C minor</option>
+						<option value="F_MINOR">F minor</option>
+						<option value="B_FLAT_MINOR">B&flat; minor</option>
+						<option value="E_FLAT_MINOR">E&flat; minor</option>
+						<option value="A_FLAT_MINOR">A&flat; minor</option>
+					</optgroup>
+					<optgroup label="&sharp; major">
+						<option value="G_MAJOR">G major</option>
+						<option value="D_MAJOR">D major</option>
+						<option value="A_MAJOR">A major</option>
+						<option value="E_MAJOR">E major</option>
+						<option value="B_MAJOR">B major</option>
+						<option value="F_SHARP_MAJOR">F&sharp; major</option>
+						<option value="C_SHARP_MAJOR">G&sharp; major</option>
+					</optgroup>
+					<optgroup label="&sharp; minor">
+						<option value="E_MINOR">E minor</option>
+						<option value="B_MINOR">B minor</option>
+						<option value="F_SHARP_MINOR">F&sharp; minor</option>
+						<option value="C_SHARP_MINOR">C&sharp; minor</option>
+						<option value="G_SHARP_MINOR">G&sharp; minor</option>
+						<option value="D_SHARP_MINOR">D&sharp; minor</option>
+						<option value="A_SHARP_MINOR">A&sharp; minor</option>
+					</optgroup>
+				</select><br>
+				<button id="songChange" type="button" onclick="processSongChange()">Change Song Info</button>
+			</form>
+		</div>
+		<button id="resetPattern" type="button" onclick="resetPattern()">Reset Pattern</button>
+		<script src="everything.js"></script>
 	</body>
 </html>
 <!--

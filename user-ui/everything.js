@@ -93,6 +93,35 @@ function setup() {
 	noStroke();
 }
 
+function processSongChange() {
+	let newBPM = document.getElementById("conductor-bpm").value;
+	let newKey = document.getElementById("keys").value;
+	if (newBPM === "") {
+		alert("The BPM field cannot be empty!");
+	} else if (newKey === "") {
+		// Shouldn't happen, but just in case
+		alert("The key field cannot be empty!");
+	} else {
+		// we good, change the song info
+		changeBPM(newBPM);
+		changeKey(newKey);
+
+		// update the note palette
+		fillInNoteCell(pContext0, pCenterX0, pCenterY0, pRadius, noteColor[currentKey[0]]);
+		fillInNoteCell(pContext1, pCenterX1, pCenterY1, pRadius, noteColor[currentKey[1]]);
+		fillInNoteCell(pContext2, pCenterX2, pCenterY2, pRadius, noteColor[currentKey[2]]);
+		fillInNoteCell(pContext3, pCenterX3, pCenterY3, pRadius, noteColor[currentKey[3]]);
+		fillInNoteCell(pContext4, pCenterX4, pCenterY4, pRadius, noteColor[currentKey[4]]);
+		fillInNoteCell(pContext5, pCenterX5, pCenterY5, pRadius, noteColor[currentKey[5]]);
+		fillInNoteCell(pContext6, pCenterX6, pCenterY6, pRadius, noteColor[currentKey[6]]);
+		fillInRestCell(pContextR, pCenterWR, pCenterHR);
+	}
+}
+
+function changeBPM(bpm) {
+	document.getElementById("tempo").textContent = bpm;
+}
+
 function changeKey(key) {
 	switch (key) {
 		case "C_MAJOR": currentKey = C_MAJOR; keyName = "C major"; break;
@@ -390,7 +419,7 @@ pContext5.scale(2, 1);
 pContext6.scale(2, 1);
 pContextR.scale(2, 1);
 
-function resetCells() {
+function resetPattern() {
 	context0.clearRect(0, 0, canvas0.width * 2, canvas0.height);
 	context1.clearRect(0, 0, canvas1.width * 2, canvas1.height);
 	context2.clearRect(0, 0, canvas2.width * 2, canvas2.height);
