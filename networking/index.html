@@ -31,12 +31,6 @@
 
 		<script src="./index.js"></script>
 
-		<script>
-			window.addEventListener('beforeunload', event => {
-				console.log('Goodbye');
-			});
-		</script>
-
 		<!-- Step 1: Create a Room, or Join One -->
 
 		<button type="button" id="createRoom" onclick="openForm(true)">
@@ -46,9 +40,9 @@
 			Join a Band!
 		</button>
 
-		<!-- Step 2A: If creating, pick a band name, user name and password -->
-		<!-- Step 2A: If joining, pick a band name, user name and password -->
-		
+		<!-- Step 2: Pick band name, user name -->
+		<!-- Step 2 cont: Ensure people cant make already existing bands, or join non-existant/busy bands, 
+			finally create necessary docs and redirect to band page -->
 		<form id="bandInfo">
 			<h1 id = joinChoice></h1>
 			<label for="name">Name:</label>
@@ -64,8 +58,5 @@
             <button type="button" onclick = "enterRoom()">Let's Go!</button>
             <p id = "errorRoom">This room is taken, full, or just isn't working out</p>
 		</form>
-
-		<!-- Step 3: Show member name, role, and other band members -->
-		
 	</body>
 </html>

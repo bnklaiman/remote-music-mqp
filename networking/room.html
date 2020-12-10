@@ -29,18 +29,10 @@
 			firebase.initializeApp(firebaseConfig);
 		</script>
 
-		<script src="./index.js"></script>
+		<script src="./room.js"></script>
 
-		<script>
-			window.addEventListener('beforeunload', event => {
-				console.log('Goodbye');
-			});
-		</script>
-
-		<!-- Step 1: Create a Room, or Join One -->
-		<!-- Step 2A: If creating, pick a band name, user name and password -->
-		<!-- Step 2A: If joining, pick a band name, user name and password -->
-        <!-- Step 3: Show member name, role, and other band members -->
+		
+        <!-- Show member name, role, role UI, and other band members for each band state -->
         <div id = "mainRoom">
             <h1 id="info">info loading...</h1>
             <h2 id="instrument">role loading...</h2>
