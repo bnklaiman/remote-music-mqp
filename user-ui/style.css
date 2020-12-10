@@ -1,0 +1,60 @@
+html {
+	padding: 1%;
+	font-family: 'Raleway', sans-serif;
+}
+
+button, select, input {
+	font-family: 'Raleway', sans-serif;
+}
+
+h1, h3, h4, p, ul, li {
+	color: white;
+	text-align: left;
+}
+
+.note-cell {
+	margin-left: 10px; 
+	border: 1px solid white;
+}
+
+#note-grid {
+	position: absolute;
+	right: 0px;
+	top: 20%;
+}
+
+#note-palette {
+	position: absolute;
+	bottom: 30px;
+	border: 1px solid white;
+}
+
+#volume-controls {
+	position: absolute;
+	bottom: 250px;
+}
+
+#conductor-controls {
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+}
+
+#resetPattern {
+	position: absolute;
+	bottom: 225px;
+}
+
+.palette-cell {
+	border: 1px solid white;
+	cursor: pointer;
+}
+
+form {
+	color: white;
+}
+
+canvas {
+	height: 50px;
+	width: 50px;
+}
