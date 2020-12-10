@@ -18,16 +18,16 @@ let shapes = [];
 
 // music init
 let notes = ["C", 
-			 "C\u266F/D\u266D", 
+			 "C#", 
 			 "D", 
-			 "D\u266F/E\u266D", 
+			 "D#", 
 			 "E", 
 			 "F", 
-			 "F\u266F/G\u266D", 
+			 "F#", 
 			 "G", 
-			 "G\u266F/A\u266D", 
+			 "G#", 
 			 "A", 
-			 "A\u266F/B\u266D", 
+			 "A#", 
 			 "B"];
 
 let noteColor = ["#FF0000", 
@@ -83,6 +83,81 @@ let currentKey = A_SHARP_MINOR; // Ab minor, for testing purposes
 let keyName = "";
 changeKey("A_SHARP_MINOR");
 
+Tone.Transport.bpm.value = 120;
+changeBPM(Tone.Transport.bpm.value);
+
+// define instruments
+const synth = new Tone.Synth().toDestination();
+const fmSynth = new Tone.FMSynth().toDestination()
+const polySynth = new Tone.PolySynth(Tone.Synth, {
+	oscillator: {
+		type: "fatsawtooth",
+		count: 3,
+		spread: 30
+	},
+	envelope: {
+		attack: 0.01,
+		decay: 0.1,
+		sustain: 0.5,
+		release: 0.4,
+		attackCurve: "exponential"
+	},
+}).toDestination();
+const piano = new Tone.Sampler({
+	urls: {
+		C4: "C4.mp3",
+	},
+	baseUrl: "../audio/"
+}).toDestination();
+
+document.addEventListener('keydown', (event) => {
+	switch (event.code) {
+		case 'Digit1': synth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
+		case 'Digit2': synth.triggerAttackRelease(notes[currentKey[1]] + "4", "16n"); break;
+		case 'Digit3': synth.triggerAttackRelease(notes[currentKey[2]] + "4", "16n"); break;
+		case 'Digit4': synth.triggerAttackRelease(notes[currentKey[3]] + "4", "16n"); break;
+		case 'Digit5': synth.triggerAttackRelease(notes[currentKey[4]] + "4", "16n"); break;
+		case 'Digit6': synth.triggerAttackRelease(notes[currentKey[5]] + "4", "16n"); break;
+		case 'Digit7': synth.triggerAttackRelease(notes[currentKey[6]] + "4", "16n"); break;
+
+		case 'KeyQ': fmSynth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
+		case 'KeyW': fmSynth.triggerAttackRelease(notes[currentKey[1]] + "4", "16n"); break;
+		case 'KeyE': fmSynth.triggerAttackRelease(notes[currentKey[2]] + "4", "16n"); break;
+		case 'KeyR': fmSynth.triggerAttackRelease(notes[currentKey[3]] + "4", "16n"); break;
+		case 'KeyT': fmSynth.triggerAttackRelease(notes[currentKey[4]] + "4", "16n"); break;
+		case 'KeyY': fmSynth.triggerAttackRelease(notes[currentKey[5]] + "4", "16n"); break;
+		case 'KeyU': fmSynth.triggerAttackRelease(notes[currentKey[6]] + "4", "16n"); break;
+
+		case 'KeyA': polySynth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
+		case 'KeyS': polySynth.triggerAttackRelease(notes[currentKey[1]] + "4", "16n"); break;
+		case 'KeyD': polySynth.triggerAttackRelease(notes[currentKey[2]] + "4", "16n"); break;
+		case 'KeyF': polySynth.triggerAttackRelease(notes[currentKey[3]] + "4", "16n"); break;
+		case 'KeyG': polySynth.triggerAttackRelease(notes[currentKey[4]] + "4", "16n"); break;
+		case 'KeyH': polySynth.triggerAttackRelease(notes[currentKey[5]] + "4", "16n"); break;
+		case 'KeyJ': polySynth.triggerAttackRelease(notes[currentKey[6]] + "4", "16n"); break;
+
+		// we want this to work, but it doesn't work with local files :/
+		/*
+		case 'KeyZ': piano.triggerAttackRelease(notes[currentKey[0]] + "2"); break;
+		case 'KeyX': piano.triggerAttackRelease(notes[currentKey[1]] + "2"); break;
+		case 'KeyC': piano.triggerAttackRelease(notes[currentKey[2]] + "2"); break;
+		case 'KeyV': piano.triggerAttackRelease(notes[currentKey[3]] + "2"); break;
+		case 'KeyB': piano.triggerAttackRelease(notes[currentKey[4]] + "2"); break;
+		case 'KeyN': piano.triggerAttackRelease(notes[currentKey[5]] + "2"); break;
+		case 'KeyM': piano.triggerAttackRelease(notes[currentKey[6]] + "2"); break;
+		*/
+
+		// so for now we're using the basic synth instead :)
+		case 'KeyZ': synth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
+		case 'KeyX': synth.triggerAttackRelease(notes[currentKey[1]] + "4", "16n"); break;
+		case 'KeyC': synth.triggerAttackRelease(notes[currentKey[2]] + "4", "16n"); break;
+		case 'KeyV': synth.triggerAttackRelease(notes[currentKey[3]] + "4", "16n"); break;
+		case 'KeyB': synth.triggerAttackRelease(notes[currentKey[4]] + "4", "16n"); break;
+		case 'KeyN': synth.triggerAttackRelease(notes[currentKey[5]] + "4", "16n"); break;
+		case 'KeyM': synth.triggerAttackRelease(notes[currentKey[6]] + "4", "16n"); break;
+	}
+})
+
 var canvas;
 
 function setup() {
@@ -119,7 +194,7 @@ function processSongChange() {
 }
 
 function changeBPM(bpm) {
-	document.getElementById("tempo").textContent = bpm;
+	document.getElementById("bpm").textContent = bpm;
 }
 
 function changeKey(key) {
