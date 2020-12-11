@@ -109,78 +109,84 @@ function onJoinRoom() {
 }
 
 /**
+ * Sets a band document listener to listen for band state
+ */
+function getBandInfo() {
+    leaveBand = bandDoc.onSnapshot(/*{includeMetadataChanges: true},*/function (doc) {
+        bandSnapShot(doc);
+    })
+}
+
+/**
+ * function for getBandInfo
  * Runs right after member joins room
  * Sets a band document listener to listen for band state
  * Continually updates number of members present
  */
-function getBandInfo() {
-    leaveBand = bandDoc.onSnapshot(/*{includeMetadataChanges: true},*/function (doc) {
-        var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-        console.log('SnapShot activated : ', source);
+function bandSnapShot(doc) {
+    var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+    console.log('SnapShot activated : ', source);
 
-        //Update display names and member Role
-        doc.ref.collection('members').get()
-            .then(function (members) {
-                return members.docs.map(doc => doc.data())
-            })
-            .then(function (memberslist) {
-                document.getElementById('allMembers').innerHTML = "Your Band: " + bandName + "<br>" + "Hosted by " + doc.data().host + "<br>" + "<br>";
-                memberslist.forEach(function (item) {
+    //Update display names and member Role
+    doc.ref.collection('members').get()
+        .then(function (members) {
+            return members.docs.map(doc => doc.data())
+        })
+        .then(function (memberslist) {
+            document.getElementById('allMembers').innerHTML = "Your Band: " + bandName + "<br>" + "Hosted by " + doc.data().host + "<br>" + "<br>";
+            memberslist.forEach(function (item) {
 
-                    if (item.userName === memberName) memberRole = item.role;
-                    let displayRole = item.role;
+                if (item.userName === memberName) memberRole = item.role;
+                let displayRole = item.role;
 
-                    if (displayRole === 'none') displayRole = '';
-                    else displayRole += ': ';
-                    document.getElementById('allMembers').innerHTML += displayRole + item.userName + "<br>";
-                });
+                if (displayRole === 'none') displayRole = '';
+                else displayRole += ': ';
+                document.getElementById('allMembers').innerHTML += displayRole + item.userName + "<br>";
+            });
+            document.getElementById('instrument').textContent = `You are the ${memberRole}`;
+            bandDoc.update({ members: memberslist.length, });
+        })
+        .then(function () {
+            //Band State changes
+            const oldState = bandState;
+            bandState = doc.data().status;
+            if (oldState != bandState) {
+                console.log('Detected band state change: ' + oldState + ' to --> ' + bandState);
+                switch (bandState) {
+                    case READYING_UP:
+                        //what UI elements are we hiding
+                        //which ones, if any are revealed?
+                        document.getElementById('instrument').style.display = 'none';
+                        if (memberIsHost) document.getElementById('hostStart').style.display = '';
+                        document.getElementById('clockdiv').style.display = 'none';
+                        document.getElementById('nextGame').style.display = 'none';
 
-                bandDoc.update({ members: memberslist.length,});
-            })
-            .then(function () {
-                //Band State changes
-                const oldState = bandState;
-                bandState = doc.data().status;
-                if (oldState != bandState) {
-                    console.log('Detected band state change: ' + oldState + ' to --> ' + bandState);
-                    switch (bandState) {
-                        case READYING_UP:
-                            //what UI elements are we hiding
-                            //which ones, if any are revealed?
-                            document.getElementById('instrument').style.display = 'none';
-                            if (memberIsHost) document.getElementById('hostStart').style.display = '';
-                            document.getElementById('clockdiv').style.display = 'none';
-                            document.getElementById('nextGame').style.display = 'none';
+                        break;
+                    case PLAYING_MUSIC:
+                        //start Timer
+                        console.log(memberRole);
+                        document.getElementById('instrument').style.display = 'block';
+                        document.getElementById('clockdiv').style.display = 'block';
 
-                            break;
-                        case PLAYING_MUSIC:
-                            //start Timer
-                            console.log(memberRole);
-                            document.getElementById('instrument').style.display = 'block';
-                            document.getElementById('instrument').textContent = `You are the ${memberRole}`;
-                            document.getElementById('clockdiv').style.display = 'block';
-
-                            //clock stuff
-                            const minutes = .1;
-                            const currentTime = Date.parse(new Date());
-                            const deadline = new Date(currentTime + minutes * 60 * 1000);
-                            initializeClock('clockdiv', deadline, endSong);
-                            break;
-                        case DONE_PLAYING:
-                            //hide music UI
-                            //hide timer
-                            document.getElementById('clockdiv').style.display = 'none';
-                            //document.getElementById('nextGame').style.display = 'block';
-                            break;
-                        case LEAVE_BAND://how to delete band?
-                            exitBand();//This kicks EVERYONE out
-                        default:
-                            console.log('state is undefined');
-                    }
+                        //clock stuff
+                        const minutes = .1;
+                        const currentTime = Date.parse(new Date());
+                        const deadline = new Date(currentTime + minutes * 60 * 1000);
+                        initializeClock('clockdiv', deadline, endSong);
+                        break;
+                    case DONE_PLAYING:
+                        //hide music UI
+                        //hide timer
+                        document.getElementById('clockdiv').style.display = 'none';
+                        //document.getElementById('nextGame').style.display = 'block';
+                        break;
+                    case LEAVE_BAND://how to delete band?
+                        exitBand();//This kicks EVERYONE out
+                    default:
+                        console.log('state is undefined');
                 }
-            })
-
-    })
+            }
+        })
 }
 
 /**
@@ -230,7 +236,7 @@ function beginSong() {
 /**
  * Assign member roles and pull from database
  */
-function assignRoles(targetStatus) {
+async function assignRoles(targetStatus) {
     if (!memberIsHost) {
         console.log('attempted to make chnages as a member, not a host')
         return;
@@ -272,10 +278,14 @@ function assignRoles(targetStatus) {
         }
     }))
 
-    Promise.all(updatePromises).then(function () {
+    Promise.all(updatePromises)
+    .then(() => 
         bandDoc.update({ status: targetStatus })
-    });
-
+    )
+    .then(() => 
+        bandDoc.get().then(doc => 
+        bandSnapShot(doc))
+    )
 }
 
 /**
