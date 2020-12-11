@@ -60,17 +60,12 @@ function enterRoom() {
 				} else {//Create the band!
 					joinRef.set({
 						bandname: bandName,
-						members: 0,
+						members: {[userName] : 'none'},
 						status: CREATED,
 						passCode: passCode,
 						createdAt: new Date().getTime(),
 						host: userName
-					}).then(() => //now make user a member of the band
-						joinRef.collection('members').doc(userName).set({
-							userName: userName,
-							role: 'none',
-						})
-					).then(() =>//redirect host to their room
+					}).then(() =>//redirect host to their room
 						location.href = 'room.html'
 					)
 				}
@@ -90,10 +85,9 @@ function enterRoom() {
 					errorRoom.textContent = 'The band is in the middle of playing! Wait until the room is open.';
 				}
 				else {
-					joinRef.collection('members').doc(userName)//create the member under the band
-					.set({
-						userName: userName,
-						role: 'none'
+					joinRef//create the member under the band
+					.update({
+						['members.' + userName] : 'none'
 					})
 					.then(() =>//redirect to the room
 							location.href = 'room.html'

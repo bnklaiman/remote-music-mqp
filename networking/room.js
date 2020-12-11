@@ -12,7 +12,6 @@ const instruments = [
 
 //could consider putting this in one object
 let memberName;
-let memberDoc; //reference to firestore
 let memberRole;
 
 //could consider putting this in one object
@@ -91,7 +90,6 @@ function onJoinRoom() {
     memberIsHost = localStorage.getItem('isHost');
     memberIsHost = (memberIsHost === 'true');
 
-    memberDoc = db.doc(`Bands/${bandName}/members/${memberName}`);
     bandDoc = db.doc(`Bands/${bandName}`);
 
     document.getElementById('info').textContent = `Member Name: ${memberName}`;
@@ -126,26 +124,24 @@ function getBandInfo() {
 function bandSnapShot(doc) {
     var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
     console.log('SnapShot activated : ', source);
-
     //Update display names and member Role
-    doc.ref.collection('members').get()
-        .then(function (members) {
-            return members.docs.map(doc => doc.data())
-        })
-        .then(function (memberslist) {
-            document.getElementById('allMembers').innerHTML = "Your Band: " + bandName + "<br>" + "Hosted by " + doc.data().host + "<br>" + "<br>";
-            memberslist.forEach(function (item) {
+    let bandmembers = doc.data().members;
+    console.log('In SnapShot: ', bandmembers);
+    let memberslist = Object.keys(bandmembers);
+    let memberRoles = Object.values(bandmembers);
+    console.log(memberslist);
+    console.log(memberRoles);
+    document.getElementById('allMembers').innerHTML = "Your Band: " + bandName + "<br>" + "Hosted by " + doc.data().host + "<br>" + "<br>";
+    for(let i = 0; i < memberslist.length; i++){
+        if (memberslist[i] === memberName) memberRole = memberRoles[i];
+        let displayRole = memberRoles[i];
 
-                if (item.userName === memberName) memberRole = item.role;
-                let displayRole = item.role;
-
-                if (displayRole === 'none') displayRole = '';
-                else displayRole += ': ';
-                document.getElementById('allMembers').innerHTML += displayRole + item.userName + "<br>";
-            });
-            document.getElementById('instrument').textContent = `You are the ${memberRole}`;
-            bandDoc.update({ members: memberslist.length, });
-        })
+        if (displayRole === 'none') displayRole = '';
+        else displayRole += ': ';
+        document.getElementById('allMembers').innerHTML += displayRole + memberslist[i] + "<br>";
+    }
+    document.getElementById('instrument').textContent = `You are the ${memberRole}`;
+    bandDoc.update({ groupSize: memberslist.length, })
         .then(function () {
             //Band State changes
             const oldState = bandState;
@@ -205,10 +201,6 @@ function toggleMusicUI(role, show) {
  * Used when a member wants to leave
  */
 function exitBand() {
-    //db stuff
-    //memberDoc.delete().then(() => console.log(memberName + 'left'));
-    //bandDoc.update({ passCode: memberName });
-
     //local stuff
     console.log('Left');
     leaveBand();
@@ -242,46 +234,46 @@ async function assignRoles(targetStatus) {
         return;
     }
 
-    let updatePromises = [];
+    //let updatePromises = [];
 
-    updatePromises.push(bandDoc.collection('members').get().then(function (members) {
-        let memberslist = members.docs.map(doc => doc.data());
+    bandDoc.get().then(function (doc) {
+        let bandmembers = doc.data().members;
+        console.log(bandmembers);
+        let memberslist = Object.keys(bandmembers);
+        let memberRoles = Object.values(bandmembers);
+
         let n = memberslist.length;
         let start = Math.floor(Math.random() * n);
-        console.log(start);
 
-        //set other instruments
         for (let i = 0; i < n; i++) {
-            let name = memberslist[(i + start) % n].userName;//start conductor on random member
+
+            let name = memberslist[(i + start) % n];//start conductor on random member
             console.log('checking: ' + name);
             if (targetStatus === PLAYING_MUSIC) {
 
-                if (i === 0) {
-                    updatePromises.push(bandDoc.collection('members').doc(name).update({
-                        role: 'conductor',
-                    }))
+                if (i === 0) {  
+
+                    bandmembers[memberslist[i]] = 'conductor';
                 }
                 else {
                     let randomRole = instruments[i % instruments.length];//melody always chosen first
                     console.log(randomRole);
-                    updatePromises.push(bandDoc.collection('members').doc(name).update({
-                        role: randomRole,
-                    }))
+                    bandmembers[memberslist[i]] = randomRole;
                 }
             }
             else {
-                updatePromises.push(bandDoc.collection('members').doc(name).update({
-                    role: 'none',
-                }))
+                bandmembers[memberslist[i]] = 'none';
             }
-
         }
-    }))
+        console.log("After Assigned Roles:" , bandmembers);
+        return bandmembers
 
-    Promise.all(updatePromises)
-    .then(() => 
-        bandDoc.update({ status: targetStatus })
-    )
+    }).then((band) => {
+        bandDoc.update({
+            members : band,
+            status: targetStatus
+        })
+    })
     .then(() => 
         bandDoc.get().then(doc => 
         bandSnapShot(doc))
