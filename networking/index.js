@@ -64,7 +64,10 @@ function enterRoom() {
 						status: CREATED,
 						passCode: passCode,
 						createdAt: new Date().getTime(),
-						host: userName
+						host: userName,
+						music : {},
+						bpm : 60,
+						key : 'C#'
 					}).then(() =>//redirect host to their room
 						location.href = 'room.html'
 					)
