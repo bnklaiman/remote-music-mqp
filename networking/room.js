@@ -12,7 +12,6 @@ const instruments = [
 
 //could consider putting this in one object
 let memberName;
-let memberDoc; //reference to firestore
 let memberRole;
 
 //could consider putting this in one object
@@ -20,6 +19,9 @@ let bandName;
 let bandDoc;//reference to firestore
 let bandState;
 let leaveBand;
+
+let music_key;
+let music_bpm;
 
 let memberIsHost = false;
 
@@ -91,7 +93,6 @@ function onJoinRoom() {
     memberIsHost = localStorage.getItem('isHost');
     memberIsHost = (memberIsHost === 'true');
 
-    memberDoc = db.doc(`Bands/${bandName}/members/${memberName}`);
     bandDoc = db.doc(`Bands/${bandName}`);
 
     document.getElementById('info').textContent = `Member Name: ${memberName}`;
@@ -109,78 +110,83 @@ function onJoinRoom() {
 }
 
 /**
+ * Sets a band document listener to listen for band state
+ */
+function getBandInfo() {
+    leaveBand = bandDoc.onSnapshot(/*{includeMetadataChanges: true},*/function (doc) {
+        bandSnapShot(doc);
+    })
+}
+
+/**
+ * function for getBandInfo
  * Runs right after member joins room
  * Sets a band document listener to listen for band state
  * Continually updates number of members present
  */
-function getBandInfo() {
-    leaveBand = bandDoc.onSnapshot(/*{includeMetadataChanges: true},*/function (doc) {
-        var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-        console.log('SnapShot activated : ', source);
+function bandSnapShot(doc) {
+    // var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+    // console.log('SnapShot activated : ', source);
+    //Update display names and member Role
+    readPatterns(doc);//read pushed music changes
+    let bandmembers = doc.data().members;
+    let memberslist = Object.keys(bandmembers);
+    let memberRoles = Object.values(bandmembers);
+    document.getElementById('allMembers').innerHTML = "Your Band: " + bandName + "<br>" + "Hosted by " + doc.data().host + "<br>" + "<br>";
+    
+    for (let i = 0; i < memberslist.length; i++) {
+        if (memberslist[i] === memberName) memberRole = memberRoles[i];
+        let displayRole = memberRoles[i];
 
-        //Update display names and member Role
-        doc.ref.collection('members').get()
-            .then(function (members) {
-                return members.docs.map(doc => doc.data())
-            })
-            .then(function (memberslist) {
-                document.getElementById('allMembers').innerHTML = "Your Band: " + bandName + "<br>" + "Hosted by " + doc.data().host + "<br>" + "<br>";
-                memberslist.forEach(function (item) {
+        if (displayRole === 'none') displayRole = '';
+        else displayRole += ': ';
+        document.getElementById('allMembers').innerHTML += displayRole + memberslist[i] + "<br>";
+    }
 
-                    if (item.userName === memberName) memberRole = item.role;
-                    let displayRole = item.role;
+    document.getElementById('instrument').textContent = `You are the ${memberRole}`;
+    bandDoc.update({ groupSize: memberslist.length, })
+        .then(function () {
+            //Band State changes
+            const oldState = bandState;
+            bandState = doc.data().status;
+            if (oldState != bandState) {
+                console.log('Detected band state change: ' + oldState + ' to --> ' + bandState);
+                switch (bandState) {
+                    case READYING_UP:
+                        //what UI elements are we hiding
+                        //which ones, if any are revealed?
+                        document.getElementById('instrument').style.display = 'none';
+                        if (memberIsHost) document.getElementById('hostStart').style.display = '';
+                        document.getElementById('clockdiv').style.display = 'none';
+                        document.getElementById('nextGame').style.display = 'none';
 
-                    if (displayRole === 'none') displayRole = '';
-                    else displayRole += ': ';
-                    document.getElementById('allMembers').innerHTML += displayRole + item.userName + "<br>";
-                });
+                        break;
+                    case PLAYING_MUSIC:
+                        //start Timer;
+                        toggleMusicUI(memberRole, true);
+                        document.getElementById('instrument').style.display = 'block';
+                        document.getElementById('clockdiv').style.display = 'block';
 
-                bandDoc.update({ members: memberslist.length,});
-            })
-            .then(function () {
-                //Band State changes
-                const oldState = bandState;
-                bandState = doc.data().status;
-                if (oldState != bandState) {
-                    console.log('Detected band state change: ' + oldState + ' to --> ' + bandState);
-                    switch (bandState) {
-                        case READYING_UP:
-                            //what UI elements are we hiding
-                            //which ones, if any are revealed?
-                            document.getElementById('instrument').style.display = 'none';
-                            if (memberIsHost) document.getElementById('hostStart').style.display = '';
-                            document.getElementById('clockdiv').style.display = 'none';
-                            document.getElementById('nextGame').style.display = 'none';
-
-                            break;
-                        case PLAYING_MUSIC:
-                            //start Timer
-                            console.log(memberRole);
-                            document.getElementById('instrument').style.display = 'block';
-                            document.getElementById('instrument').textContent = `You are the ${memberRole}`;
-                            document.getElementById('clockdiv').style.display = 'block';
-
-                            //clock stuff
-                            const minutes = .1;
-                            const currentTime = Date.parse(new Date());
-                            const deadline = new Date(currentTime + minutes * 60 * 1000);
-                            initializeClock('clockdiv', deadline, endSong);
-                            break;
-                        case DONE_PLAYING:
-                            //hide music UI
-                            //hide timer
-                            document.getElementById('clockdiv').style.display = 'none';
-                            //document.getElementById('nextGame').style.display = 'block';
-                            break;
-                        case LEAVE_BAND://how to delete band?
-                            exitBand();//This kicks EVERYONE out
-                        default:
-                            console.log('state is undefined');
-                    }
+                        //clock stuff
+                        const minutes = .1;
+                        const currentTime = Date.parse(new Date());
+                        const deadline = new Date(currentTime + minutes * 60 * 1000);
+                        initializeClock('clockdiv', deadline, endSong);
+                        break;
+                    case DONE_PLAYING:
+                        //hide music UI
+                        toggleMusicUI(memberRole, false);
+                        //hide timer
+                        document.getElementById('clockdiv').style.display = 'none';
+                        //document.getElementById('nextGame').style.display = 'block';
+                        break;
+                    case LEAVE_BAND://how to delete band?
+                        exitBand();//This kicks EVERYONE out
+                    default:
+                        console.log('state is undefined');
                 }
-            })
-
-    })
+            }
+        })
 }
 
 /**
@@ -196,13 +202,57 @@ function toggleMusicUI(role, show) {
 }
 
 /**
+ * place this in Benny's js file
+ * send conductor key and bpm to group
+ */
+function conductorSend() {
+    let conductorKey = 'Am';//document.getElementById()...value
+    let conductorBpm = 120;//document.getElementById()...value
+
+
+    bandDoc.update({
+        key: conductorKey,
+        bpm: conductorBpm
+    })
+}
+
+/**
+ * place this in Benny's js file
+ * run on music UI button
+ * set "pattern" to js object of noteval:amplitude, noteval:amplitude
+ */
+function sendPattern() {
+    let pattern = {1 :{7 : 8}, 2 : {7 : 8}, 3 : {7 : 8}, 4 : {7 : 8}, 5 : {7 : 8}, 6 : {7 : 8}, 7 : {7 : 8}, 8 : {7 : 8}};
+    bandDoc.update({
+        ['music.' + (memberName + ':' + memberRole)]: pattern
+    })
+}
+
+/**
+ * run in onSnapshot, 
+ */
+function readPatterns(doc) {
+    if (bandState != PLAYING_MUSIC) {
+        return;
+    }
+    //parse music to role, and pattern
+    music_bpm = doc.data().bpm;
+    music_key = doc.data().key;
+
+    let allRoles = Object.keys(doc.data().music);
+    let allMusic = Object.values(doc.data().music);
+
+    for (let i = 0; i < allRoles.length; i++) {
+        let thisRole = allRoles[i].split(':')[1];//gets role, like 'melody'
+        // so now, we have both role and associatted music - tone js has to play it
+    }
+
+}
+
+/**
  * Used when a member wants to leave
  */
 function exitBand() {
-    //db stuff
-    //memberDoc.delete().then(() => console.log(memberName + 'left'));
-    //bandDoc.update({ passCode: memberName });
-
     //local stuff
     console.log('Left');
     leaveBand();
@@ -230,52 +280,56 @@ function beginSong() {
 /**
  * Assign member roles and pull from database
  */
-function assignRoles(targetStatus) {
+async function assignRoles(targetStatus) {
     if (!memberIsHost) {
         console.log('attempted to make chnages as a member, not a host')
         return;
     }
 
-    let updatePromises = [];
+    //let updatePromises = [];
 
-    updatePromises.push(bandDoc.collection('members').get().then(function (members) {
-        let memberslist = members.docs.map(doc => doc.data());
+    bandDoc.get().then(function (doc) {
+        let bandmembers = doc.data().members;
+        console.log(bandmembers);
+        let memberslist = Object.keys(bandmembers);
+        let memberRoles = Object.values(bandmembers);
+
         let n = memberslist.length;
         let start = Math.floor(Math.random() * n);
-        console.log(start);
 
-        //set other instruments
         for (let i = 0; i < n; i++) {
-            let name = memberslist[(i + start) % n].userName;//start conductor on random member
+
+            let name = memberslist[(i + start) % n];//start conductor on random member
             console.log('checking: ' + name);
             if (targetStatus === PLAYING_MUSIC) {
 
                 if (i === 0) {
-                    updatePromises.push(bandDoc.collection('members').doc(name).update({
-                        role: 'conductor',
-                    }))
+
+                    bandmembers[memberslist[i]] = 'conductor';
                 }
                 else {
                     let randomRole = instruments[i % instruments.length];//melody always chosen first
                     console.log(randomRole);
-                    updatePromises.push(bandDoc.collection('members').doc(name).update({
-                        role: randomRole,
-                    }))
+                    bandmembers[memberslist[i]] = randomRole;
                 }
             }
             else {
-                updatePromises.push(bandDoc.collection('members').doc(name).update({
-                    role: 'none',
-                }))
+                bandmembers[memberslist[i]] = 'none';
             }
-
         }
-    }))
+        console.log("After Assigned Roles:", bandmembers);
+        return bandmembers
 
-    Promise.all(updatePromises).then(function () {
-        bandDoc.update({ status: targetStatus })
-    });
-
+    }).then((band) => {
+        bandDoc.update({
+            members: band,
+            status: targetStatus
+        })
+    })
+        .then(() =>
+            bandDoc.get().then(doc =>
+                bandSnapShot(doc))
+        )
 }
 
 /**
