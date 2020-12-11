@@ -84,7 +84,7 @@ function enterRoom() {
 					errorRoom.style.display = 'block';
 					errorRoom.textContent = 'This band has too many members - try another one';
 				}
-				else if (docSnapshot.data().status != READYING_UP) {//doesn't allow member to a join a band that is already playing
+				else if (docSnapshot.data().status === PLAYING_MUSIC) {//doesn't allow member to a join a band that is already playing
 					const errorRoom = document.getElementById('errorRoom');
 					errorRoom.style.display = 'block';
 					errorRoom.textContent = 'The band is in the middle of playing! Wait until the room is open.';
