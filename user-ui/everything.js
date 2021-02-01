@@ -17,18 +17,7 @@ const LIFESPAN = 3;
 let shapes = [];
 
 // music init
-let notes = ["C", 
-			 "C#", 
-			 "D", 
-			 "D#", 
-			 "E", 
-			 "F", 
-			 "F#", 
-			 "G", 
-			 "G#", 
-			 "A", 
-			 "A#", 
-			 "B"];
+let notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 let noteColor = ["#FF0000", 
 				 "#FF8000", 
@@ -364,7 +353,7 @@ class Shape {
 			case "A":  color = "#8000FF"; break;
 			case "A#": color = "#FF00FF"; break;
 			case "B":  color = "#FF0080"; break;
-			default:    color = "#FFFFFF"; break;
+			default:   color = "#FFFFFF"; break;
 		}
 		polygon(this.x, this.y, this.radius, this.scale, this.npoints, color);
 		this.timeAlive += 1 / frameRate();

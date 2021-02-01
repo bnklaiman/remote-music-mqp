@@ -6,8 +6,8 @@ const DONE_PLAYING = 2;
 const LEAVE_BAND = 3;
 const instruments = [
     'bass',
-    'melody',
-    'chord'
+    'melody 1',
+    'melody 2'
 ];
 
 //could consider putting this in one object
@@ -198,6 +198,7 @@ function toggleMusicUI(role, show) {
         case 'conductor':
             break;
         default:
+            // TODO - if true, then show the music stuff, if false hide the music stuff
     }
 }
 
