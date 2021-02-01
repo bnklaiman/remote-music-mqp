@@ -11,6 +11,28 @@
 		<title>Main Visual</title>
 	</head>
 	<body>
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
+
+		<script>
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+			  apiKey: "AIzaSyCkl7P0Oysm3YZ1GhTaIguB1LXZPKukvfE",
+			  authDomain: "remote-music-mqp.firebaseapp.com",
+			  projectId: "remote-music-mqp",
+			  storageBucket: "remote-music-mqp.appspot.com",
+			  messagingSenderId: "495541452173",
+			  appId: "1:495541452173:web:46cf18411b04d7cc2991c4"
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+		</script>
+
+		<script src="./room.js"></script>
+		<script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+		<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+
 		<div id="music-info">
 			<h1>Music Info</h1>
 			<p>BPM: <span id="bpm">XXX</span> BPM</p>
@@ -20,18 +42,24 @@
 				You should not be seeing this. This is where all the available notes are supposed to be.
 			</ul>
 		</div>
+
+		<!-- Show member name, role, role UI, and other band members for each band state -->
+        <div id="mainRoom">
+            <h1 id="info">info loading...</h1>
+            <h2 id="instrument">role loading...</h2>
+            <br/>
+            <button type="button" id="hostStart" onclick="beginSong()">Start Song</button>
+            <div id="clockdiv"></div>
+			<div id="nextGame">
+				<button type="button" onclick="prepPlay()">Play Another</button>
+				<button type="button" onclick="stopPlay()">Exit </button>
+			</div>
+            <h3 id = "allMembers">members list loading...</h3>
+		</div>
+		
 		<div id="user-controls">
 			<button id="resetPattern" type="button" onclick="resetPattern()">Reset Pattern</button>
-			<table id="note-grid">
-				<tr><td class="note-cell"><canvas id="canvas0"></canvas></td></tr>
-				<tr><td class="note-cell"><canvas id="canvas1"></canvas></td></tr>
-				<tr><td class="note-cell"><canvas id="canvas2"></canvas></td></tr>
-				<tr><td class="note-cell"><canvas id="canvas3"></canvas></td></tr>
-				<tr><td class="note-cell"><canvas id="canvas4"></canvas></td></tr>
-				<tr><td class="note-cell"><canvas id="canvas5"></canvas></td></tr>
-				<tr><td class="note-cell"><canvas id="canvas6"></canvas></td></tr>
-				<tr><td class="note-cell"><canvas id="canvas7"></canvas></td></tr>
-			</table>
+			
 			<div id="volume-controls">
 				<p>Volume:</p>
 				<input id="volume" type="range" min="10" max="75" value="38">
@@ -50,6 +78,18 @@
 				<tr>
 					<td class="palette-cell"><canvas id="palette6" onclick="input6()"></canvas></td>
 					<td class="palette-cell" colspan="2"><canvas id="palette-rest" onclick="inputRest()"></canvas></td>
+				</tr>
+			</table>
+			<table id="note-grid">
+				<tr>
+					<td class="note-cell"><canvas id="canvas0"></canvas></td>
+					<td class="note-cell"><canvas id="canvas1"></canvas></td>
+					<td class="note-cell"><canvas id="canvas2"></canvas></td>
+					<td class="note-cell"><canvas id="canvas3"></canvas></td>
+					<td class="note-cell"><canvas id="canvas4"></canvas></td>
+					<td class="note-cell"><canvas id="canvas5"></canvas></td>
+					<td class="note-cell"><canvas id="canvas6"></canvas></td>
+					<td class="note-cell"><canvas id="canvas7"></canvas></td>
 				</tr>
 			</table>
 		</div>

@@ -47,7 +47,6 @@ function enterRoom() {
 	localStorage.setItem('user', userName);
 	localStorage.setItem('band', bandName);
 	
-
 	const joinRef = db.collection('Bands').doc(bandName);
 
 	if (localStorage.getItem('isHost') == 'true') {

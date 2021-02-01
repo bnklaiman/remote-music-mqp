@@ -7,7 +7,7 @@ button, select, input {
 	font-family: 'Raleway', sans-serif;
 }
 
-h1, h3, h4, p, ul, li {
+#music-info {
 	color: white;
 	text-align: left;
 }
@@ -17,10 +17,15 @@ h1, h3, h4, p, ul, li {
 	border: 1px solid white;
 }
 
+#mainRoom, #info {
+	text-align: center;
+	color: white;
+}
+
 #note-grid {
 	position: absolute;
-	right: 0px;
-	top: 20%;
+	bottom: 30px;
+	left: 38.3%; 
 }
 
 #note-palette {
