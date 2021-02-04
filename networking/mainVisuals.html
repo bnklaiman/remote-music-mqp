@@ -14,7 +14,6 @@
 		<!-- The core Firebase JS SDK is always required and must be listed first -->
 		<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
-
 		<script>
 			// Your web app's Firebase configuration
 			var firebaseConfig = {
@@ -29,9 +28,38 @@
 			firebase.initializeApp(firebaseConfig);
 		</script>
 
+		<script src="./index.js"></script>
 		<script src="./room.js"></script>
-		<script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-		<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+
+		<!-- Step 1: Create a Room, or Join One -->
+
+		<div id="band-portal">
+			<button type="button" id="createRoom" onclick="openForm(true)">
+				Create a Band!
+			</button>
+			<button type="button" id="joinRoom" onclick="openForm(false)">
+				Join a Band!
+			</button>
+		</div>
+
+		<!-- Step 2: Pick band name, user name -->
+		<!-- Step 2 cont: Ensure people cant make already existing bands, or join non-existant/busy bands, 
+			finally create necessary docs and redirect to band page -->
+		<form id="bandInfo">
+			<h1 id = joinChoice></h1>
+			<label for="name">Name:</label>
+            <input type="text" id="name" name="name" value=""/><br/>
+
+            <label for="band">Band:</label>
+            <input type="text" id="band" name="band" value=""/><br/>
+
+            <!-- <label for="passcode">Passcode:</label>
+            <input type="text" id="passcode" name="passcode" value=""/> -->
+            
+            <br/><br/>
+            <button type="button" onclick = "enterRoom()">Let's Go!</button>
+            <p id="errorRoom">This room is taken, full, or just isn't working out</p>
+		</form>
 
 		<div id="music-info">
 			<h1>Music Info</h1>

@@ -99,6 +99,7 @@ const piano = new Tone.Sampler({
 	baseUrl: "../audio/"
 }).toDestination();
 
+// set up note playback
 document.addEventListener('keydown', (event) => {
 	switch (event.code) {
 		case 'Digit1': synth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
@@ -250,14 +251,6 @@ function draw() {
 		}
 		pop();
 	}
-}
-
-function repeatChar(count, char) {
-	output = "";
-	for (let i = 0; i < count; i++) {
-		output += char;
-	}
-	return output;
 }
 
 function getNoteName(note) {

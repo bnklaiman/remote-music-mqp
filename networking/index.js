@@ -25,11 +25,13 @@ function openForm(hostBool) {
 	document.getElementById('bandInfo').style.display = 'block';
 
 	let formTitle = document.getElementById('joinChoice');
+	let bandInfo = document.getElementById('bandInfo');
+	bandInfo.style.visibility = 'block';
 	if (hostBool) {
-		formTitle.style.display = 'block';
+		formTitle.style.visibility = 'block';
 		formTitle.textContent = 'Create a Band';
 	} else {
-		formTitle.style.display = 'block';
+		formTitle.style.visibility = 'block';
 		formTitle.textContent = 'Join a Band';
 	}
 }
@@ -50,6 +52,7 @@ function enterRoom() {
 	const joinRef = db.collection('Bands').doc(bandName);
 
 	if (localStorage.getItem('isHost') == 'true') {
+		bandInfo.style.visibility = 'none';
 		joinRef.get()
 			.then((docSnapshot) => {
 				if (docSnapshot.exists) {//Cannot make a band that already exists
@@ -74,6 +77,7 @@ function enterRoom() {
 			});
 	}
 	else{//member is trying to join the band instead
+		bandInfo.style.visibility = 'none';
 		joinRef.get().then((docSnapshot) => {
 			if (docSnapshot.exists) {
 				if (docSnapshot.data().members > 10) {//limit to 10 members

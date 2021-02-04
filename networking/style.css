@@ -7,6 +7,10 @@ button, select, input {
 	font-family: 'Raleway', sans-serif;
 }
 
+button {
+	border-radius: 15px;
+}
+
 #music-info {
 	color: white;
 	text-align: left;
@@ -17,9 +21,42 @@ button, select, input {
 	border: 1px solid white;
 }
 
-#mainRoom, #info {
+#bandInfo{
+    display: none;
+}
+
+#errorRoom {
+	display: none;
+}
+
+#nextGame, #errorRoom, #joinChoice{
+    display: show;
+}
+
+#mainRoom {
+	position: absolute;
+	top: 30px;
+	right: 30px;
 	text-align: center;
 	color: white;
+}
+
+#bandInfo {
+	position: absolute;
+	left: 35%;
+	top: 40%;
+	text-align: center;
+	width: 30%;
+	margin: auto;
+}
+
+#band-portal {
+	position: absolute;
+	text-align: center;
+	width: 20%;
+	top: 30%;
+	left: 40%;
+	margin: auto;
 }
 
 #note-grid {
