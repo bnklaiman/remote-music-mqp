@@ -150,6 +150,31 @@ document.addEventListener('keydown', (event) => {
 
 var canvas;
 
+// init page number for note grid
+let currentPage = 1;
+document.getElementById("note-grid-page-label").textContent = `Page ${currentPage}/4`;
+// maximum and minimum number of grid pages
+const maxPages = 4;
+const minPages = 1;
+
+function nextPage() {
+	if (!(currentPage + 1 > maxPages)) {
+		document.getElementById("note-grid-page-label").textContent = `Page ${currentPage + 1}/4`;
+		currentPage += 1;
+	} else {
+		console.log("Cannot go past maximum grid page!");
+	}
+}
+
+function previousPage() {
+	if (!(currentPage - 1 < minPages)) {
+		document.getElementById("note-grid-page-label").textContent = `Page ${currentPage - 1}/4`;
+		currentPage -= 1;
+	} else {
+		console.log("Cannot go past minimum grid page!");
+	}
+}
+
 function setup() {
 	canvas = createCanvas(windowWidth, windowHeight);
 	canvas.position(0, 0);
