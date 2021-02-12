@@ -150,12 +150,15 @@ document.addEventListener('keydown', (event) => {
 
 var canvas;
 
-// init page number for note grid
+// initialize page and cell numbers for note grid
 let currentPage = 1;
+let currentCell = 1;
 document.getElementById("note-grid-page-label").textContent = `Page ${currentPage}/4`;
+document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
 // maximum and minimum number of grid pages
 const maxPages = 4;
 const minPages = 1;
+const maxCells = 8;
 
 function nextPage() {
 	if (!(currentPage + 1 > maxPages)) {
@@ -174,6 +177,8 @@ function previousPage() {
 		console.log("Cannot go past minimum grid page!");
 	}
 }
+
+
 
 function setup() {
 	canvas = createCanvas(windowWidth, windowHeight);
@@ -519,6 +524,9 @@ function resetPattern() {
 	cell5Filled = false;
 	cell6Filled = false;
 	cell7Filled = false;
+
+	currentCell = 1;
+	document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
 }
 
 function fillInNoteCell(context, centerX, centerY, radius, color) {
@@ -607,6 +615,14 @@ function processInput(currentColor, inputType) {
 		}
 		cell7Filled = true;
 		console.log("Cell 7 filled.");
+	}
+
+	if (!(currentCell + 1 > maxCells) && !cell7Filled) {
+		currentCell += 1;
+		document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
+	} else {
+		document.getElementById("note-grid-cell-count").textContent = "";
+		console.log("Cannot go past maximum cell count!");
 	}
 }
 

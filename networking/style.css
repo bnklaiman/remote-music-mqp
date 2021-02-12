@@ -87,6 +87,10 @@ button {
 	right: 30%;
 }
 
+#note-grid-cell-count {
+	color: white;
+}
+
 #note-palette {
 	position: absolute;
 	bottom: 30px;
