@@ -1,0 +1,23 @@
+{
+  "name": "remote-music-mqp",
+  "version": "1.0.0",
+  "description": "A remote music MQP",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm start",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bnklaiman/remote-music-mqp.git"
+  },
+  "author": "Benjamin Klaiman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bnklaiman/remote-music-mqp/issues"
+  },
+  "homepage": "https://github.com/bnklaiman/remote-music-mqp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
