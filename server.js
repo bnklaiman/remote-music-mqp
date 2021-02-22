@@ -1,8 +1,6 @@
-// Load Node modules
-var express = require('express');
-
-// Initialize Express
-var app = express();
+// Load Node modules, initialize Express
+const express = require('express');
+const app = express();
 
 // Render static files
 app.use(express.static('public'));

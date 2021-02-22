@@ -94,57 +94,56 @@ const polySynth = new Tone.PolySynth(Tone.Synth, {
 }).toDestination();
 const piano = new Tone.Sampler({
 	urls: {
-		C4: "C4.mp3",
+		C4: "piano-C4.mp3",
+		E4: "piano-E4.mp3",
+		A4: "piano-A4.mp3"
 	},
 	baseUrl: "../audio/"
 }).toDestination();
 
+// set current instrument, redefine this as necessary when roles are assigned
+let currentInstrument = piano;
+
+// Play a note with a given instrument, with the volume automatically retrieved from the slider
+function playNote(instrument, note) {
+	instrument.volume.value = document.getElementById("volume").value / 6;
+	instrument.triggerAttackRelease(note + "4", "16n");
+}
+
 // set up note playback
 document.addEventListener('keydown', (event) => {
 	switch (event.code) {
-		case 'Digit1': synth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
-		case 'Digit2': synth.triggerAttackRelease(notes[currentKey[1]] + "4", "16n"); break;
-		case 'Digit3': synth.triggerAttackRelease(notes[currentKey[2]] + "4", "16n"); break;
-		case 'Digit4': synth.triggerAttackRelease(notes[currentKey[3]] + "4", "16n"); break;
-		case 'Digit5': synth.triggerAttackRelease(notes[currentKey[4]] + "4", "16n"); break;
-		case 'Digit6': synth.triggerAttackRelease(notes[currentKey[5]] + "4", "16n"); break;
-		case 'Digit7': synth.triggerAttackRelease(notes[currentKey[6]] + "4", "16n"); break;
+		case 'Digit1': playNote(synth, notes[currentKey[0]]); break;
+		case 'Digit2': playNote(synth, notes[currentKey[1]]); break;
+		case 'Digit3': playNote(synth, notes[currentKey[2]]); break;
+		case 'Digit4': playNote(synth, notes[currentKey[3]]); break;
+		case 'Digit5': playNote(synth, notes[currentKey[4]]); break;
+		case 'Digit6': playNote(synth, notes[currentKey[5]]); break;
+		case 'Digit7': playNote(synth, notes[currentKey[6]]); break;
 
-		case 'KeyQ': fmSynth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
-		case 'KeyW': fmSynth.triggerAttackRelease(notes[currentKey[1]] + "4", "16n"); break;
-		case 'KeyE': fmSynth.triggerAttackRelease(notes[currentKey[2]] + "4", "16n"); break;
-		case 'KeyR': fmSynth.triggerAttackRelease(notes[currentKey[3]] + "4", "16n"); break;
-		case 'KeyT': fmSynth.triggerAttackRelease(notes[currentKey[4]] + "4", "16n"); break;
-		case 'KeyY': fmSynth.triggerAttackRelease(notes[currentKey[5]] + "4", "16n"); break;
-		case 'KeyU': fmSynth.triggerAttackRelease(notes[currentKey[6]] + "4", "16n"); break;
+		case 'KeyQ': playNote(fmSynth, notes[currentKey[0]]); break;
+		case 'KeyW': playNote(fmSynth, notes[currentKey[1]]); break;
+		case 'KeyE': playNote(fmSynth, notes[currentKey[2]]); break;
+		case 'KeyR': playNote(fmSynth, notes[currentKey[3]]); break;
+		case 'KeyT': playNote(fmSynth, notes[currentKey[4]]); break;
+		case 'KeyY': playNote(fmSynth, notes[currentKey[5]]); break;
+		case 'KeyU': playNote(fmSynth, notes[currentKey[6]]); break;
 
-		case 'KeyA': polySynth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
-		case 'KeyS': polySynth.triggerAttackRelease(notes[currentKey[1]] + "4", "16n"); break;
-		case 'KeyD': polySynth.triggerAttackRelease(notes[currentKey[2]] + "4", "16n"); break;
-		case 'KeyF': polySynth.triggerAttackRelease(notes[currentKey[3]] + "4", "16n"); break;
-		case 'KeyG': polySynth.triggerAttackRelease(notes[currentKey[4]] + "4", "16n"); break;
-		case 'KeyH': polySynth.triggerAttackRelease(notes[currentKey[5]] + "4", "16n"); break;
-		case 'KeyJ': polySynth.triggerAttackRelease(notes[currentKey[6]] + "4", "16n"); break;
+		case 'KeyA': playNote(polySynth, notes[currentKey[0]]); break;
+		case 'KeyS': playNote(polySynth, notes[currentKey[1]]); break;
+		case 'KeyD': playNote(polySynth, notes[currentKey[2]]); break;
+		case 'KeyF': playNote(polySynth, notes[currentKey[3]]); break;
+		case 'KeyG': playNote(polySynth, notes[currentKey[4]]); break;
+		case 'KeyH': playNote(polySynth, notes[currentKey[5]]); break;
+		case 'KeyJ': playNote(polySynth, notes[currentKey[6]]); break;
 
-		// we want this to work, but it doesn't work with local files :/
-		/*
-		case 'KeyZ': piano.triggerAttackRelease(notes[currentKey[0]] + "2"); break;
-		case 'KeyX': piano.triggerAttackRelease(notes[currentKey[1]] + "2"); break;
-		case 'KeyC': piano.triggerAttackRelease(notes[currentKey[2]] + "2"); break;
-		case 'KeyV': piano.triggerAttackRelease(notes[currentKey[3]] + "2"); break;
-		case 'KeyB': piano.triggerAttackRelease(notes[currentKey[4]] + "2"); break;
-		case 'KeyN': piano.triggerAttackRelease(notes[currentKey[5]] + "2"); break;
-		case 'KeyM': piano.triggerAttackRelease(notes[currentKey[6]] + "2"); break;
-		*/
-
-		// so for now we're using the basic synth instead :)
-		case 'KeyZ': synth.triggerAttackRelease(notes[currentKey[0]] + "4", "16n"); break;
-		case 'KeyX': synth.triggerAttackRelease(notes[currentKey[1]] + "4", "16n"); break;
-		case 'KeyC': synth.triggerAttackRelease(notes[currentKey[2]] + "4", "16n"); break;
-		case 'KeyV': synth.triggerAttackRelease(notes[currentKey[3]] + "4", "16n"); break;
-		case 'KeyB': synth.triggerAttackRelease(notes[currentKey[4]] + "4", "16n"); break;
-		case 'KeyN': synth.triggerAttackRelease(notes[currentKey[5]] + "4", "16n"); break;
-		case 'KeyM': synth.triggerAttackRelease(notes[currentKey[6]] + "4", "16n"); break;
+		case 'KeyZ': playNote(piano, notes[currentKey[0]]); break;
+		case 'KeyX': playNote(piano, notes[currentKey[1]]); break;
+		case 'KeyC': playNote(piano, notes[currentKey[2]]); break;
+		case 'KeyV': playNote(piano, notes[currentKey[3]]); break;
+		case 'KeyB': playNote(piano, notes[currentKey[4]]); break;
+		case 'KeyN': playNote(piano, notes[currentKey[5]]); break;
+		case 'KeyM': playNote(piano, notes[currentKey[6]]); break;
 	}
 })
 
@@ -553,6 +552,7 @@ function fillInRestCell(context, w, h) {
 function processInput(currentColor, inputType) {
 	if (cell0Filled === false) {
 		if (inputType === "note") {
+			playNote(currentInstrument, notes[currentKey[0]]);
 			fillInNoteCell(context0, centerX0, centerY0, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context0, canvas0.width, canvas0.height);
@@ -561,6 +561,7 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 0 filled.");
 	} else if (cell1Filled === false) {
 		if (inputType === "note") {
+			playNote(currentInstrument, notes[currentKey[1]]);
 			fillInNoteCell(context1, centerX1, centerY1, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context1, canvas1.width, canvas1.height);
@@ -569,6 +570,7 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 1 filled.");
 	} else if (cell2Filled === false) {
 		if (inputType === "note") {
+			playNote(currentInstrument, notes[currentKey[2]]);
 			fillInNoteCell(context2, centerX2, centerY2, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context2, canvas2.width, canvas2.height);
@@ -577,6 +579,7 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 2 filled.");
 	} else if (cell3Filled === false) {
 		if (inputType === "note") {
+			playNote(currentInstrument, notes[currentKey[3]]);
 			fillInNoteCell(context3, centerX3, centerY3, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context3, canvas3.width, canvas3.height);
@@ -585,6 +588,7 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 3 filled.");
 	} else if (cell4Filled === false) {
 		if (inputType === "note") {
+			playNote(currentInstrument, notes[currentKey[4]]);
 			fillInNoteCell(context4, centerX4, centerY4, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context4, canvas4.width, canvas4.height);
@@ -593,6 +597,7 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 4 filled.");
 	} else if (cell5Filled === false) {
 		if (inputType === "note") {
+			playNote(currentInstrument, notes[currentKey[5]]);
 			fillInNoteCell(context5, centerX5, centerY5, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context5, canvas5.width, canvas5.height);
@@ -601,6 +606,7 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 5 filled.");
 	} else if (cell6Filled === false) {
 		if (inputType === "note") {
+			playNote(currentInstrument, notes[currentKey[6]]);
 			fillInNoteCell(context6, centerX6, centerY6, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context6, canvas6.width, canvas6.height);
@@ -609,6 +615,7 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 6 filled.");
 	} else if (cell7Filled === false) {
 		if (inputType === "note") {
+			playNote(currentInstrument, notes[currentKey[7]]);
 			fillInNoteCell(context7, centerX7, centerY7, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context7, canvas7.width, canvas7.height);
