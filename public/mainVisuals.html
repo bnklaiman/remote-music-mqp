@@ -65,7 +65,7 @@
 			<h1>Music Info</h1>
 			<p>BPM: <span id="bpm">XXX</span> BPM</p>
 			<p>Key: <span id="key">You should not be seeing this. This is where the current key is supposed to be.</span></p>
-			<h4>Notes: </h4>
+			<h4>Available Notes: </h4>
 			<ul id="notes">
 				You should not be seeing this. This is where all the available notes are supposed to be.
 			</ul>
@@ -85,10 +85,8 @@
             <h3 id = "allMembers">members list loading...</h3>
 		</div>
 		
-		<div id="user-controls">
-			<button id="resetPattern" type="button" onclick="resetPattern()">Reset Pattern</button>
-			
-			<div id="volume-controls">
+		<div id="user-controls">		
+			<div id="volume-control">
 				<p>Volume:</p>
 				<input id="volume" type="range" min="5" max="75" value="40">
 			</div>
@@ -108,13 +106,18 @@
 					<td class="palette-cell" colspan="2"><canvas id="palette-rest" onclick="inputRest()"></canvas></td>
 				</tr>
 			</table>
+
+			<div id="pattern-control">
+				<button type="button" id="send-pattern" onclick="">Send!</button>
+				<br>
+				<button type="button" id="reset-pattern" onclick="resetPattern()">Reset Pattern</button>
+			</div>
+
 			<table id="note-grid">
 				<tr id="note-grid-page">
 					<span>
 						<td id="note-grid-cell-count"><!-- Cell # will be filled in here --></td>
-						<td><button type="button" id="note-grid-button-previous" onclick="previousPage()">&#9664;</button></td>
 						<td id="note-grid-page-label"><strong>If you can see this text, something has gone wrong.</strong></td>
-						<td><button type="button" id="note-grid-button-next" onclick="nextPage()">&#9654;</button></td>
 					</span>
 				</tr>
 				<tr>

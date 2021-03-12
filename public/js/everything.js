@@ -27,10 +27,12 @@ let noteColor = ["#FF0000",
 				 "#00FF80", 
 				 "#00FFFF", 
 				 "#0080FF", 
-				 "#0000FF", 
+				 "#0040FF", 
 				 "#8000FF", 
 				 "#FF00FF", 
-				 "#FF0080"]
+				 "#FF0080"];
+
+let userInput = {};
 
 // all keys
 const C_MAJOR = [0, 2, 4, 5, 7, 9, 11];
@@ -78,25 +80,19 @@ changeBPM(Tone.Transport.bpm.value);
 // define instruments
 const synth = new Tone.Synth().toDestination();
 const fmSynth = new Tone.FMSynth().toDestination()
-const polySynth = new Tone.PolySynth(Tone.Synth, {
-	oscillator: {
-		type: "fatsawtooth",
-		count: 3,
-		spread: 30
-	},
-	envelope: {
-		attack: 0.01,
-		decay: 0.1,
-		sustain: 0.5,
-		release: 0.4,
-		attackCurve: "exponential"
-	},
-}).toDestination();
 const piano = new Tone.Sampler({
 	urls: {
-		C4: "piano-C4.mp3",
-		E4: "piano-E4.mp3",
-		A4: "piano-A4.mp3"
+		C4: "piano/piano-C4.mp3",
+		E4: "piano/piano-E4.mp3",
+		A4: "piano/piano-A4.mp3"
+	},
+	baseUrl: "../audio/"
+}).toDestination();
+const guitar = new Tone.Sampler({
+	urls: {
+		C4: "guitar/guitar-C4.mp3",
+		E4: "guitar/guitar-E4.mp3",
+		A4: "guitar/guitar-A4.mp3"
 	},
 	baseUrl: "../audio/"
 }).toDestination();
@@ -129,13 +125,13 @@ document.addEventListener('keydown', (event) => {
 		case 'KeyY': playNote(fmSynth, notes[currentKey[5]]); break;
 		case 'KeyU': playNote(fmSynth, notes[currentKey[6]]); break;
 
-		case 'KeyA': playNote(polySynth, notes[currentKey[0]]); break;
-		case 'KeyS': playNote(polySynth, notes[currentKey[1]]); break;
-		case 'KeyD': playNote(polySynth, notes[currentKey[2]]); break;
-		case 'KeyF': playNote(polySynth, notes[currentKey[3]]); break;
-		case 'KeyG': playNote(polySynth, notes[currentKey[4]]); break;
-		case 'KeyH': playNote(polySynth, notes[currentKey[5]]); break;
-		case 'KeyJ': playNote(polySynth, notes[currentKey[6]]); break;
+		case 'KeyA': playNote(guitar, notes[currentKey[0]]); break;
+		case 'KeyS': playNote(guitar, notes[currentKey[1]]); break;
+		case 'KeyD': playNote(guitar, notes[currentKey[2]]); break;
+		case 'KeyF': playNote(guitar, notes[currentKey[3]]); break;
+		case 'KeyG': playNote(guitar, notes[currentKey[4]]); break;
+		case 'KeyH': playNote(guitar, notes[currentKey[5]]); break;
+		case 'KeyJ': playNote(guitar, notes[currentKey[6]]); break;
 
 		case 'KeyZ': playNote(piano, notes[currentKey[0]]); break;
 		case 'KeyX': playNote(piano, notes[currentKey[1]]); break;
@@ -151,33 +147,12 @@ var canvas;
 
 // initialize page and cell numbers for note grid
 let currentPage = 1;
-let currentCell = 1;
-document.getElementById("note-grid-page-label").textContent = `Page ${currentPage}/4`;
-document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
+let currentCell = 0;
+// document.getElementById("note-grid-page-label").textContent = `Page ${currentPage}/4`;
+document.getElementById("note-grid-page-label").textContent = "";
+document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell + 1}`;
 // maximum and minimum number of grid pages
-const maxPages = 4;
-const minPages = 1;
 const maxCells = 8;
-
-function nextPage() {
-	if (!(currentPage + 1 > maxPages)) {
-		document.getElementById("note-grid-page-label").textContent = `Page ${currentPage + 1}/4`;
-		currentPage += 1;
-	} else {
-		console.log("Cannot go past maximum grid page!");
-	}
-}
-
-function previousPage() {
-	if (!(currentPage - 1 < minPages)) {
-		document.getElementById("note-grid-page-label").textContent = `Page ${currentPage - 1}/4`;
-		currentPage -= 1;
-	} else {
-		console.log("Cannot go past minimum grid page!");
-	}
-}
-
-
 
 function setup() {
 	canvas = createCanvas(windowWidth, windowHeight);
@@ -257,11 +232,16 @@ function changeKey(key) {
 	}
 	document.getElementById("key").textContent = keyName;
 	let noteListHTML = "";
-	noteListHTML += "<ul id='notes'>";
-	for (let i = 0; i < 7; i++) {
-		noteListHTML += "<li><strong><span style=\"color:" + noteColor[currentKey[i]] + ";\">" + notes[currentKey[i]] + "</span></strong></li>";
+	noteListHTML += "<table id='notes' style='table-layout: fixed; height: 100%; border: 1px solid white'>";
+	for (let i = 0; i < 6; i += 3) {
+		noteListHTML += "<tr>";
+		noteListHTML += "<td id='demo-note-palette'><strong><span style=\"color:" + noteColor[currentKey[i]] + ";\">" + notes[currentKey[i]] + "</span></strong></td>";
+		noteListHTML += "<td id='demo-note-palette'><strong><span style=\"color:" + noteColor[currentKey[i + 1]] + ";\">" + notes[currentKey[i + 1]] + "</span></strong></td>";
+		noteListHTML += "<td id='demo-note-palette'><strong><span style=\"color:" + noteColor[currentKey[i + 2]] + ";\">" + notes[currentKey[i + 2]] + "</span></strong></td>";
+		noteListHTML += "</tr>";
 	}
-	noteListHTML += "</ul>";
+	noteListHTML += "<tr><td id='demo-note-palette'><strong><span style=\"color:" + noteColor[currentKey[6]] + ";\">" + notes[currentKey[6]] + "</span></strong></td></tr>";
+	noteListHTML += "</table>"
 	document.getElementById("notes").outerHTML = noteListHTML;
 }
   
@@ -528,6 +508,18 @@ function resetPattern() {
 	document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
 }
 
+function updateLocalJson(note) {
+	let cell = currentCell + ((currentPage - 1) * 8);
+	let value = "";
+	if (note != "rest") {
+		value = note;
+	} else {
+		value = "rest";
+	}
+	let volume = document.getElementById("volume").value;
+	userInput[currentCell - 1] = {"cell": cell, "value": value, "volume": volume};
+}
+
 function fillInNoteCell(context, centerX, centerY, radius, color) {
 	context.clearRect(0, 0, centerX * 2, centerY * 2);
 	context.beginPath();
@@ -624,53 +616,63 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 7 filled.");
 	}
 
-	if (!(currentCell + 1 > maxCells) && !cell7Filled) {
-		currentCell += 1;
-		document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
-	} else {
+	if (currentCell + 1 > maxCells) {
 		document.getElementById("note-grid-cell-count").textContent = "";
 		console.log("Cannot go past maximum cell count!");
+	} else {
+		currentCell += 1;
+		document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
 	}
+
+	console.log(userInput);
 }
 
 // run one of these when a user selects a note or rest
 function input0() {
 	let currentColor = noteColor[currentKey[0]];
 	processInput(currentColor, "note");
+	updateLocalJson(0);
 }
 
 function input1() {
 	let currentColor = noteColor[currentKey[1]];
 	processInput(currentColor, "note");
+	updateLocalJson(1);
 }
 
 function input2() {
 	let currentColor = noteColor[currentKey[2]];
 	processInput(currentColor, "note");
+	updateLocalJson(2);
 }
 
 function input3() {
 	let currentColor = noteColor[currentKey[3]];
 	processInput(currentColor, "note");
+	updateLocalJson(3);
 }
 
 function input4() {
 	let currentColor = noteColor[currentKey[4]];
 	processInput(currentColor, "note");
+	updateLocalJson(4);
 }
 
 function input5() {
 	let currentColor = noteColor[currentKey[5]];
 	processInput(currentColor, "note");
+	updateLocalJson(5);
 }
 
 function input6() {
 	let currentColor = noteColor[currentKey[6]];
 	processInput(currentColor, "note");
+	updateLocalJson(6);
 }
 
 function inputRest() {
 	processInput("#FFFFFF", "rest");
+	updateLocalJson("rest");
 }
 
 // draw palette

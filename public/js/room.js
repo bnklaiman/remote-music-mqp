@@ -220,10 +220,21 @@ function conductorSend() {
 /**
  * place this in Benny's js file
  * run on music UI button
- * set "pattern" to js object of noteval:amplitude, noteval:amplitude
+ * set "pattern" to js object of noteval:volume, noteval:volume
  */
 function sendPattern() {
-    let pattern = {1 :{7 : 8}, 2 : {7 : 8}, 3 : {7 : 8}, 4 : {7 : 8}, 5 : {7 : 8}, 6 : {7 : 8}, 7 : {7 : 8}, 8 : {7 : 8}};
+    // let pattern = {1 :{7 : 8}, 2 : {7 : 8}, 3 : {7 : 8}, 4 : {7 : 8}, 5 : {7 : 8}, 6 : {7 : 8}, 7 : {7 : 8}, 8 : {7 : 8}};
+    let pattern = 
+    {
+        1: { "value": 2, "volume": 5 },
+        2: { "value": 1, "volume": 15 },
+        3: { "value": 4, "volume": 25 },
+        4: { "value": 3, "volume": 35 },
+        5: { "value": 6, "volume": 45 },
+        6: { "value": 5, "volume": 55 },
+        7: { "value": 7, "volume": 65 },
+        8: { "value": "rest", "volume": 40 }
+    };
     bandDoc.update({
         ['music.' + (memberName + ':' + memberRole)]: pattern
     })

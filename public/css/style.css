@@ -97,7 +97,12 @@ button {
 	border: 1px solid white;
 }
 
-#volume-controls {
+#demo-note-palette {
+	border: 1px solid white;
+	padding: 10px;
+}
+
+#volume-control {
 	color: white;
 	position: absolute;
 	bottom: 250px;
@@ -109,9 +114,23 @@ button {
 	bottom: 20px;
 }
 
-#resetPattern {
+#pattern-control {
 	position: absolute;
-	bottom: 225px;
+	left: 225px;
+	bottom: 5%;
+}
+
+#send-pattern {
+	background-color: #00A000;
+	padding: 40% 60% 40% 50%;
+	margin-bottom: 5px;
+	color: white;
+}
+
+#reset-pattern {
+	background-color: crimson;
+	padding: 5% 50% 5% 50%;
+	color: white;
 }
 
 .palette-cell {
