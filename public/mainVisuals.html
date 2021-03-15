@@ -108,9 +108,14 @@
 			</table>
 
 			<div id="pattern-control">
-				<button type="button" id="send-pattern" onclick="">Send!</button>
+				<button type="button" id="send-pattern" onclick="sendToTestJson()"><strong>Send!</strong></button>
 				<br>
-				<button type="button" id="reset-pattern" onclick="resetPattern()">Reset Pattern</button>
+				<table>
+					<tr>
+						<td><button type="button" id="reset-pattern" onclick="resetPattern()"><strong>Reset</strong></button></td>
+						<td><button type="button" id="reset-all" onclick="resetAll()"><strong>Reset All</strong></button></td>
+					</tr>
+					</table>
 			</div>
 
 			<table id="note-grid">

@@ -34,6 +34,12 @@ let noteColor = ["#FF0000",
 
 let userInput = {};
 
+// let bandName = document.getElementById('band').value;
+let bandName = "123TestSessionID";
+let globalJSON = [];
+globalJSON[bandName] = [];
+let globalJSONCounter = 0;
+
 // all keys
 const C_MAJOR = [0, 2, 4, 5, 7, 9, 11];
 const A_MINOR = [9, 11, 0, 2, 4, 5, 7];
@@ -73,6 +79,7 @@ const A_SHARP_MINOR = [10, 0, 1, 3, 5, 6, 8];
 let currentKey = A_SHARP_MINOR; // Ab minor, for testing purposes
 let keyName = "";
 changeKey("A_SHARP_MINOR");
+let totalNotesSent = 0; // keeps track of total notes user has sent, for indexing
 
 Tone.Transport.bpm.value = 120;
 changeBPM(Tone.Transport.bpm.value);
@@ -506,6 +513,15 @@ function resetPattern() {
 
 	currentCell = 1;
 	document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
+	userInput = {};
+}
+
+function resetAll() {
+	if (window.confirm("Are you sure you want to reset everything? This will only affect your instrument.")) {
+		resetPattern();
+		// go through remote JSON file, remove all user's inputs
+		globalJSONCounter = 0;
+	}
 }
 
 function updateLocalJson(note) {
@@ -517,7 +533,26 @@ function updateLocalJson(note) {
 		value = "rest";
 	}
 	let volume = document.getElementById("volume").value;
-	userInput[currentCell - 1] = {"cell": cell, "value": value, "volume": volume};
+	let instrument = "";
+	if (currentInstrument === synth) {
+		instrument = "synth";
+	} else if (currentInstrument === fmSynth) {
+		instrument = "fmSynth";
+	} else if (currentInstrument === piano) {
+		instrument = "piano";
+	} else if (currentInstrument === guitar) {
+		instrument = "guitar";
+	}
+	userInput[totalNotesSent] = {"instrument": instrument, "cell": cell, "value": value, "volume": volume};
+}
+
+function sendToTestJson() {
+	for (let i = 1; i <= Object.keys(userInput).length; i++) {
+		let idx = globalJSONCounter.valueOf();
+		globalJSON[bandName][idx] = userInput[i];
+		globalJSONCounter++;
+	}
+	resetPattern();
 }
 
 function fillInNoteCell(context, centerX, centerY, radius, color) {
@@ -544,7 +579,6 @@ function fillInRestCell(context, w, h) {
 function processInput(currentColor, inputType) {
 	if (cell0Filled === false) {
 		if (inputType === "note") {
-			playNote(currentInstrument, notes[currentKey[0]]);
 			fillInNoteCell(context0, centerX0, centerY0, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context0, canvas0.width, canvas0.height);
@@ -553,7 +587,6 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 0 filled.");
 	} else if (cell1Filled === false) {
 		if (inputType === "note") {
-			playNote(currentInstrument, notes[currentKey[1]]);
 			fillInNoteCell(context1, centerX1, centerY1, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context1, canvas1.width, canvas1.height);
@@ -562,7 +595,6 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 1 filled.");
 	} else if (cell2Filled === false) {
 		if (inputType === "note") {
-			playNote(currentInstrument, notes[currentKey[2]]);
 			fillInNoteCell(context2, centerX2, centerY2, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context2, canvas2.width, canvas2.height);
@@ -571,7 +603,6 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 2 filled.");
 	} else if (cell3Filled === false) {
 		if (inputType === "note") {
-			playNote(currentInstrument, notes[currentKey[3]]);
 			fillInNoteCell(context3, centerX3, centerY3, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context3, canvas3.width, canvas3.height);
@@ -580,7 +611,6 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 3 filled.");
 	} else if (cell4Filled === false) {
 		if (inputType === "note") {
-			playNote(currentInstrument, notes[currentKey[4]]);
 			fillInNoteCell(context4, centerX4, centerY4, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context4, canvas4.width, canvas4.height);
@@ -589,7 +619,6 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 4 filled.");
 	} else if (cell5Filled === false) {
 		if (inputType === "note") {
-			playNote(currentInstrument, notes[currentKey[5]]);
 			fillInNoteCell(context5, centerX5, centerY5, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context5, canvas5.width, canvas5.height);
@@ -598,7 +627,6 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 5 filled.");
 	} else if (cell6Filled === false) {
 		if (inputType === "note") {
-			playNote(currentInstrument, notes[currentKey[6]]);
 			fillInNoteCell(context6, centerX6, centerY6, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context6, canvas6.width, canvas6.height);
@@ -607,7 +635,6 @@ function processInput(currentColor, inputType) {
 		console.log("Cell 6 filled.");
 	} else if (cell7Filled === false) {
 		if (inputType === "note") {
-			playNote(currentInstrument, notes[currentKey[7]]);
 			fillInNoteCell(context7, centerX7, centerY7, document.getElementById("volume").value, currentColor);
 		} else if (inputType === "rest") {
 			fillInRestCell(context7, canvas7.width, canvas7.height);
@@ -621,6 +648,7 @@ function processInput(currentColor, inputType) {
 		console.log("Cannot go past maximum cell count!");
 	} else {
 		currentCell += 1;
+		totalNotesSent += 1;
 		document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
 	}
 
@@ -629,42 +657,49 @@ function processInput(currentColor, inputType) {
 
 // run one of these when a user selects a note or rest
 function input0() {
+	playNote(currentInstrument, notes[currentKey[0]]);
 	let currentColor = noteColor[currentKey[0]];
 	processInput(currentColor, "note");
 	updateLocalJson(0);
 }
 
 function input1() {
+	playNote(currentInstrument, notes[currentKey[1]]);
 	let currentColor = noteColor[currentKey[1]];
 	processInput(currentColor, "note");
 	updateLocalJson(1);
 }
 
 function input2() {
+	playNote(currentInstrument, notes[currentKey[2]]);
 	let currentColor = noteColor[currentKey[2]];
 	processInput(currentColor, "note");
 	updateLocalJson(2);
 }
 
 function input3() {
+	playNote(currentInstrument, notes[currentKey[3]]);
 	let currentColor = noteColor[currentKey[3]];
 	processInput(currentColor, "note");
 	updateLocalJson(3);
 }
 
 function input4() {
+	playNote(currentInstrument, notes[currentKey[4]]);
 	let currentColor = noteColor[currentKey[4]];
 	processInput(currentColor, "note");
 	updateLocalJson(4);
 }
 
 function input5() {
+	playNote(currentInstrument, notes[currentKey[5]]);
 	let currentColor = noteColor[currentKey[5]];
 	processInput(currentColor, "note");
 	updateLocalJson(5);
 }
 
 function input6() {
+	playNote(currentInstrument, notes[currentKey[6]]);
 	let currentColor = noteColor[currentKey[6]];
 	processInput(currentColor, "note");
 	updateLocalJson(6);

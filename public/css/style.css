@@ -108,6 +108,10 @@ button {
 	bottom: 250px;
 }
 
+#volume {
+	cursor: e-resize;
+}
+
 #conductor-controls {
 	position: absolute;
 	right: 20px;
@@ -117,20 +121,43 @@ button {
 #pattern-control {
 	position: absolute;
 	left: 225px;
-	bottom: 5%;
+	bottom: 25px;
 }
 
 #send-pattern {
 	background-color: #00A000;
-	padding: 40% 60% 40% 50%;
-	margin-bottom: 5px;
+	padding: 40px 80px 40px 80px;
 	color: white;
+	font-size: xx-large;
+	cursor: pointer;
 }
 
 #reset-pattern {
 	background-color: crimson;
-	padding: 5% 50% 5% 50%;
+	padding: 15px 40px 20px 40px;
 	color: white;
+	font-size: larger;
+	cursor: pointer;
+}
+
+#reset-all {
+	background-color: #880000;
+	padding: 15px 10px 20px 10px;
+	color: white;
+	font-size: larger;
+	cursor: pointer;
+}
+
+#send-pattern:active {
+	background-color: #006000;
+}
+
+#reset-pattern:active {
+	background-color: #660000;
+}
+
+#reset-all:active {
+	background-color: #550000;
 }
 
 .palette-cell {

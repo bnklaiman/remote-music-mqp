@@ -40,7 +40,7 @@ function openForm(hostBool) {
  * Attempts to create a new band or join existing one
  * Sets local storage for user and band to prep for page change
  * Will not create if band name exists as another
- * Will not join if band has more than 10 members, or if they are in the middle of playing
+ * Will not join if band has more than 4 members, or if they are in the middle of playing
  */
 function enterRoom() {
 	let bandName = document.getElementById('band').value;
@@ -80,7 +80,7 @@ function enterRoom() {
 		bandInfo.style.visibility = 'none';
 		joinRef.get().then((docSnapshot) => {
 			if (docSnapshot.exists) {
-				if (docSnapshot.data().members > 10) {//limit to 10 members
+				if (docSnapshot.data().members > 4) {//limit to 4 members
 					const errorRoom = document.getElementById('errorRoom');
 					errorRoom.style.display = 'block';
 					errorRoom.textContent = 'This band has too many members - try another one';
