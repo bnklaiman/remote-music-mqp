@@ -36,9 +36,8 @@ let userInput = {};
 
 // let bandName = document.getElementById('band').value;
 let bandName = "123TestSessionID";
-let globalJSON = [];
+let globalJSON = {};
 globalJSON[bandName] = [];
-let globalJSONCounter = 0;
 
 // all keys
 const C_MAJOR = [0, 2, 4, 5, 7, 9, 11];
@@ -513,26 +512,40 @@ function resetPattern() {
 
 	currentCell = 1;
 	document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
-	userInput = {};
+	userInput = new Object;
 }
 
 function resetAll() {
 	if (window.confirm("Are you sure you want to reset everything? This will only affect your instrument.")) {
 		resetPattern();
 		// go through remote JSON file, remove all user's inputs
-		globalJSONCounter = 0;
+		let compareString = "";
+		if (currentInstrument === piano) {
+			compareString = "piano";
+		} else if (currentInstrument === guitar) {
+			compareString = "guitar";
+		} else if (currentInstrument === synth) {
+			compareString = "synth";
+		} else if (currentInstrument === fmSynth) {
+			compareString = "fmSynth";
+		}
+		let i = globalJSON[bandName].length;
+		while (i--) {
+			if (globalJSON[bandName][i].instrument === compareString) {
+				console.log(globalJSON[bandName].splice(i, 1));
+			}
+		}
 	}
 }
 
 function updateLocalJson(note) {
-	let cell = currentCell + ((currentPage - 1) * 8);
 	let value = "";
 	if (note != "rest") {
 		value = note;
 	} else {
 		value = "rest";
 	}
-	let volume = document.getElementById("volume").value;
+	let volume = parseInt(document.getElementById("volume").value);
 	let instrument = "";
 	if (currentInstrument === synth) {
 		instrument = "synth";
@@ -543,16 +556,15 @@ function updateLocalJson(note) {
 	} else if (currentInstrument === guitar) {
 		instrument = "guitar";
 	}
-	userInput[totalNotesSent] = {"instrument": instrument, "cell": cell, "value": value, "volume": volume};
+	userInput[totalNotesSent] = {"instrument": instrument, "value": value, "volume": volume};
 }
 
 function sendToTestJson() {
-	for (let i = 1; i <= Object.keys(userInput).length; i++) {
-		let idx = globalJSONCounter.valueOf();
-		globalJSON[bandName][idx] = userInput[i];
-		globalJSONCounter++;
+	for (let i in userInput) {
+		globalJSON[bandName].push(userInput[i]);
 	}
 	resetPattern();
+	currentCell = 0;
 }
 
 function fillInNoteCell(context, centerX, centerY, radius, color) {
