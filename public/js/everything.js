@@ -519,16 +519,7 @@ function resetAll() {
 	if (window.confirm("Are you sure you want to reset everything? This will only affect your instrument.")) {
 		resetPattern();
 		// go through remote JSON file, remove all user's inputs
-		let compareString = "";
-		if (currentInstrument === piano) {
-			compareString = "piano";
-		} else if (currentInstrument === guitar) {
-			compareString = "guitar";
-		} else if (currentInstrument === synth) {
-			compareString = "synth";
-		} else if (currentInstrument === fmSynth) {
-			compareString = "fmSynth";
-		}
+		let compareString = getInstrumentName(currentInstrument);
 		let i = globalJSON[bandName].length;
 		while (i--) {
 			if (globalJSON[bandName][i].instrument === compareString) {
@@ -546,17 +537,20 @@ function updateLocalJson(note) {
 		value = "rest";
 	}
 	let volume = parseInt(document.getElementById("volume").value);
-	let instrument = "";
-	if (currentInstrument === synth) {
-		instrument = "synth";
-	} else if (currentInstrument === fmSynth) {
-		instrument = "fmSynth";
-	} else if (currentInstrument === piano) {
-		instrument = "piano";
-	} else if (currentInstrument === guitar) {
-		instrument = "guitar";
-	}
+	let instrument = getInstrumentName(currentInstrument);
 	userInput[totalNotesSent] = {"instrument": instrument, "value": value, "volume": volume};
+}
+
+function getInstrumentName(instrument) {
+	if (instrument === synth) {
+		return "synth";
+	} else if (instrument === fmSynth) {
+		return "fmSynth";
+	} else if (instrument === piano) {
+		return "piano";
+	} else if (instrument === guitar) {
+		return "guitar";
+	}
 }
 
 function sendToTestJson() {
@@ -596,7 +590,6 @@ function processInput(currentColor, inputType) {
 			fillInRestCell(context0, canvas0.width, canvas0.height);
 		}
 		cell0Filled = true;
-		console.log("Cell 0 filled.");
 	} else if (cell1Filled === false) {
 		if (inputType === "note") {
 			fillInNoteCell(context1, centerX1, centerY1, document.getElementById("volume").value, currentColor);
@@ -604,7 +597,6 @@ function processInput(currentColor, inputType) {
 			fillInRestCell(context1, canvas1.width, canvas1.height);
 		}
 		cell1Filled = true;
-		console.log("Cell 1 filled.");
 	} else if (cell2Filled === false) {
 		if (inputType === "note") {
 			fillInNoteCell(context2, centerX2, centerY2, document.getElementById("volume").value, currentColor);
@@ -612,7 +604,6 @@ function processInput(currentColor, inputType) {
 			fillInRestCell(context2, canvas2.width, canvas2.height);
 		}
 		cell2Filled = true;
-		console.log("Cell 2 filled.");
 	} else if (cell3Filled === false) {
 		if (inputType === "note") {
 			fillInNoteCell(context3, centerX3, centerY3, document.getElementById("volume").value, currentColor);
@@ -620,7 +611,6 @@ function processInput(currentColor, inputType) {
 			fillInRestCell(context3, canvas3.width, canvas3.height);
 		}
 		cell3Filled = true;
-		console.log("Cell 3 filled.");
 	} else if (cell4Filled === false) {
 		if (inputType === "note") {
 			fillInNoteCell(context4, centerX4, centerY4, document.getElementById("volume").value, currentColor);
@@ -628,7 +618,6 @@ function processInput(currentColor, inputType) {
 			fillInRestCell(context4, canvas4.width, canvas4.height);
 		}
 		cell4Filled = true;
-		console.log("Cell 4 filled.");
 	} else if (cell5Filled === false) {
 		if (inputType === "note") {
 			fillInNoteCell(context5, centerX5, centerY5, document.getElementById("volume").value, currentColor);
@@ -636,7 +625,6 @@ function processInput(currentColor, inputType) {
 			fillInRestCell(context5, canvas5.width, canvas5.height);
 		}
 		cell5Filled = true;
-		console.log("Cell 5 filled.");
 	} else if (cell6Filled === false) {
 		if (inputType === "note") {
 			fillInNoteCell(context6, centerX6, centerY6, document.getElementById("volume").value, currentColor);
@@ -644,7 +632,6 @@ function processInput(currentColor, inputType) {
 			fillInRestCell(context6, canvas6.width, canvas6.height);
 		}
 		cell6Filled = true;
-		console.log("Cell 6 filled.");
 	} else if (cell7Filled === false) {
 		if (inputType === "note") {
 			fillInNoteCell(context7, centerX7, centerY7, document.getElementById("volume").value, currentColor);
@@ -652,7 +639,6 @@ function processInput(currentColor, inputType) {
 			fillInRestCell(context7, canvas7.width, canvas7.height);
 		}
 		cell7Filled = true;
-		console.log("Cell 7 filled.");
 	}
 
 	if (currentCell + 1 > maxCells) {
@@ -663,8 +649,6 @@ function processInput(currentColor, inputType) {
 		totalNotesSent += 1;
 		document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
 	}
-
-	console.log(userInput);
 }
 
 // run one of these when a user selects a note or rest
