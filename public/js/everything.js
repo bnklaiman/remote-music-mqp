@@ -195,6 +195,7 @@ function processSongChange() {
 
 function changeBPM(bpm) {
 	document.getElementById("bpm").textContent = bpm;
+	Tone.Transport.bpm.value = bpm;
 }
 
 function changeKey(key) {
@@ -557,6 +558,7 @@ function sendToTestJson() {
 	for (let i in userInput) {
 		globalJSON[bandName].push(userInput[i]);
 	}
+	localStorage.setItem('userInput', userInput);
 	resetPattern();
 	currentCell = 0;
 }
@@ -715,3 +717,22 @@ fillInNoteCell(pContext4, pCenterX4, pCenterY4, pRadius, noteColor[currentKey[4]
 fillInNoteCell(pContext5, pCenterX5, pCenterY5, pRadius, noteColor[currentKey[5]]);
 fillInNoteCell(pContext6, pCenterX6, pCenterY6, pRadius, noteColor[currentKey[6]]);
 fillInRestCell(pContextR, pCenterWR, pCenterHR);
+
+function play() {
+	let notes = [notes[currentKey[0]], notes[currentKey[1]]];
+	const synthPart = new Tone.Sequence(
+	function(time, note) {
+		// synth.triggerAttackRelease(note, "10hz", time);
+		playNote(piano, notes[currentKey[0]]);
+		playNote(piano, notes[currentKey[1]]);
+	},
+	notes,
+	"4n"
+	);
+	synthPart.start();
+	Tone.Transport.start();
+}
+
+window.onload = function() {
+	const firestore = index();
+}

@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/bnklaiman/remote-music-mqp#readme",
   "dependencies": {
+    "domino": "^2.1.6",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "tone": "^14.7.77",
+    "window": "^4.2.7"
   }
 }
