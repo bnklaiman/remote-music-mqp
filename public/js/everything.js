@@ -157,7 +157,6 @@ let currentCell = 0;
 // document.getElementById("note-grid-page-label").textContent = `Page ${currentPage}/4`;
 document.getElementById("note-grid-page-label").textContent = "";
 document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell + 1}`;
-// maximum and minimum number of grid pages
 const maxCells = 8;
 
 function setup() {
@@ -511,8 +510,8 @@ function resetPattern() {
 	cell6Filled = false;
 	cell7Filled = false;
 
-	currentCell = 1;
-	document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell}`;
+	currentCell = 0;
+	document.getElementById("note-grid-cell-count").textContent = `Cell ${currentCell + 1}`;
 	userInput = new Object;
 }
 
@@ -718,21 +717,26 @@ fillInNoteCell(pContext5, pCenterX5, pCenterY5, pRadius, noteColor[currentKey[5]
 fillInNoteCell(pContext6, pCenterX6, pCenterY6, pRadius, noteColor[currentKey[6]]);
 fillInRestCell(pContextR, pCenterWR, pCenterHR);
 
+let currentlyPlaying = true;
 function play() {
-	let notes = [notes[currentKey[0]], notes[currentKey[1]]];
-	const synthPart = new Tone.Sequence(
-	function(time, note) {
-		// synth.triggerAttackRelease(note, "10hz", time);
-		playNote(piano, notes[currentKey[0]]);
-		playNote(piano, notes[currentKey[1]]);
-	},
-	notes,
-	"4n"
-	);
-	synthPart.start();
-	Tone.Transport.start();
+	let noteArray = [];
+	for (const entry in globalJSON[bandName]) {
+		noteArray.push(notes[currentKey[globalJSON[bandName][entry]["value"]]] + "4");
+	}
+	const seq = new Tone.Sequence((time, note) => {
+		currentInstrument.triggerAttackRelease(note, 0.1, time);
+	}, noteArray).start(0);
+	currentlyPlaying = !currentlyPlaying;
+	if (!currentlyPlaying) {
+		Tone.Transport.start();
+	} else {
+		Tone.Transport.stop();
+	}
 }
 
 window.onload = function() {
-	const firestore = index();
+	index = index();
+	document.getElementById('joinRoom').addEventListener('click', index.openForm(true));
+	// document.getElementById('createRoom').addEventListener('click', index.openForm(false));
+	// console.log("We got here");
 }

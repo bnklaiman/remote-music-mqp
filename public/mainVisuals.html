@@ -34,10 +34,12 @@
 		<!-- Step 1: Create a Room, or Join One -->
 
 		<div id="band-portal">
-			<button type="button" id="createRoom" onclick="openForm(true)">
+			<!--<button type="button" id="createRoom" <onclick="index.openForm(true)">-->
+			<button type="button" id="createRoom">
 				Create a Band!
 			</button>
-			<button type="button" id="joinRoom" onclick="openForm(false)">
+			<!--<button type="button" id="joinRoom" onclick="index.openForm(false)">-->
+			<button type="button" id="joinRoom">
 				Join a Band!
 			</button>
 		</div>
@@ -134,7 +136,7 @@
 					<td class="note-cell"><canvas id="canvas5"></canvas></td>
 					<td class="note-cell"><canvas id="canvas6"></canvas></td>
 					<td class="note-cell"><canvas id="canvas7"></canvas></td>
-					<td><button type="button" onclick="play()"><strong>Play</strong></button></td>
+					<td><button type="button" id="play" onclick="play()"><strong>Play</strong></button></td>
 				</tr>
 			</table>
 		</div>

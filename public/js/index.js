@@ -12,14 +12,14 @@ window.index = function() {
 	 * empty at the moment
 	 * runs when join page starts
 	 */
-	function onPageLoaded() {
+	const onPageLoaded = () => {
 	}
 
 	/**
 	 * unhide forms and close button
 	 * @param {boolean} hostBool 
 	 */
-	function openForm(hostBool) {
+	const openForm = (hostBool) => {
 		localStorage.setItem('isHost', hostBool);
 		document.getElementById('createRoom').style.display = 'none';
 		document.getElementById('joinRoom').style.display = 'none';
@@ -43,7 +43,7 @@ window.index = function() {
 	 * Will not create if band name exists as another
 	 * Will not join if band has more than 4 members, or if they are in the middle of playing
 	 */
-	function enterRoom() {
+	const enterRoom = () => {
 		let bandName = document.getElementById('band').value;
 		let userName = document.getElementById('name').value;
 		let passCode = 1;//document.getElementById('passcode').value;
@@ -71,9 +71,9 @@ window.index = function() {
 							music : {},
 							bpm : 60,
 							key : 'C#'
-						}).then(() =>//redirect host to their room
+						})/*.then(() =>//redirect host to their room
 							location.href = 'room.html'
-						)
+						)*/
 					}
 				});
 		}
