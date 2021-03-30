@@ -80,6 +80,8 @@ let keyName = "";
 changeKey("A_SHARP_MINOR");
 let totalNotesSent = 0; // keeps track of total notes user has sent, for indexing
 
+let currentNote = {}
+
 Tone.Transport.bpm.value = 120;
 changeBPM(Tone.Transport.bpm.value);
 
@@ -290,10 +292,11 @@ function deleteItem(item, array) {
 	array.splice(item, 1);
 }
 
-function keyPressed() {
+// DEBUG
+/*function keyPressed() {
 	shapes.push(new Shape());
 	// return false;  // prevent default key behavior
-}
+}*/
 
 function polygon(x, y, radius, scale, npoints, color) {
 	fill(color);
@@ -313,7 +316,13 @@ class Shape {
 		this.y = random(-height * 0.4, height * 0.4);
 		this.scale = 1.0;
 		this.radius = 82;
-		switch (keyCode) {
+
+		switch (getInstrumentName(currentInstrument)) {
+			case "piano": this.npoints = OCTAGON; break;
+		}
+
+		// DEBUG STUFF
+		/*switch (keyCode) {
 			case 49: case 50: case 51: case 52: case 53: case 54: case 55:
 				this.npoints = TRIANGLE; break;
 			case 81: case 87: case 69: case 82: case 84: case 89: case 85:
@@ -324,8 +333,8 @@ class Shape {
 				this.npoints = OCTAGON; break;
 			default:
 				this.npoints = TRIANGLE; break;
-		}
-		switch(keyCode) {
+		}*/
+		/*switch (keyCode) {
 			case 49: case 81: case 65: case 90:
 				this.note = getNoteName(currentKey[0]); break;
 			case 50: case 87: case 83: case 88:
@@ -343,6 +352,8 @@ class Shape {
 			default:
 				this.note = "C";
 		}
+		*/
+		this.note = currentNote.name;
 		this.timeAlive = 0;
 	}
 
@@ -724,7 +735,11 @@ function play() {
 		noteArray.push(notes[currentKey[globalJSON[bandName][entry]["value"]]] + "4");
 	}
 	const seq = new Tone.Sequence((time, note) => {
-		currentInstrument.triggerAttackRelease(note, 0.1, time);
+		currentNote.name = note.slice(0, -1);
+		if (note !== "undefined4") {
+			currentInstrument.triggerAttackRelease(note, 0.1, time);
+			shapes.push(new Shape());
+		}
 	}, noteArray).start(0);
 	currentlyPlaying = !currentlyPlaying;
 	if (!currentlyPlaying) {
@@ -736,7 +751,7 @@ function play() {
 
 window.onload = function() {
 	index = index();
-	document.getElementById('joinRoom').addEventListener('click', index.openForm(true));
-	// document.getElementById('createRoom').addEventListener('click', index.openForm(false));
+	document.getElementById('createRoom').addEventListener('click', () => index.openForm(true));
+	document.getElementById('joinRoom').addEventListener('click', () => index.openForm(false));
 	// console.log("We got here");
 }
