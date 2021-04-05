@@ -12,15 +12,23 @@ window.room = function() {
         'guitar'
     ];
 
-    //could consider putting this in one object
-    let memberName;
-    let memberRole;
+    class Member {
+        constructor(memberName, memberRole) {
+            this.memberName = memberName;
+            this.memberRole = memberRole;
+        }
+    }
 
     //could consider putting this in one object
-    let bandName;
-    let bandDoc;//reference to firestore
-    let bandState;
-    let leaveBand;
+
+    class Band {
+        constructor(bandName, bandDoc, bandState, leaveBand) {
+            this.bandName = bandName;
+            this.bandDoc = bandDoc;  // reference to firestore
+            this.bandState = bandState;
+            this.leaveBand = leaveBand;
+        }
+    }
 
     let music_key;
     let music_bpm;
@@ -33,7 +41,7 @@ window.room = function() {
      * calculates time to target endtime
      * @param {number} endtime 
      */
-    function getTimeRemaining(endtime) {
+    const getTimeRemaining = (endtime) => {
         const total = Date.parse(endtime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
@@ -54,7 +62,7 @@ window.room = function() {
      * @param {string} id 
      * @param {number} endtime 
      */
-    function initializeClock(id, endtime, endEvent) {//to use for backend stuff set id = false, take in function for end timer event
+    const initializeClock = (id, endtime, endEvent) => {//to use for backend stuff set id = false, take in function for end timer event
         let clock;
         if (id) {
             clock = document.getElementById(id);
@@ -88,7 +96,7 @@ window.room = function() {
      * Runs as soon as member joins music room
      * Sets all global variables, except member role and bandstate
      */
-    function onJoinRoom() {
+    const onJoinRoom = () => {
         console.log('joining room');
         memberName = localStorage.getItem('user');
         bandName = localStorage.getItem('band');
@@ -114,7 +122,7 @@ window.room = function() {
     /**
      * Sets a band document listener to listen for band state
      */
-    function getBandInfo() {
+    const getBandInfo = () => {
         leaveBand = bandDoc.onSnapshot(/*{includeMetadataChanges: true},*/function (doc) {
             bandSnapShot(doc);
         })
@@ -126,7 +134,7 @@ window.room = function() {
      * Sets a band document listener to listen for band state
      * Continually updates number of members present
      */
-    function bandSnapShot(doc) {
+    const bandSnapShot = (doc) => {
         // var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
         // console.log('SnapShot activated : ', source);
         //Update display names and member Role
@@ -195,7 +203,7 @@ window.room = function() {
      * Based on role and boolean show or hide music UI
      * @param {string} role 
      */
-    function toggleMusicUI(role, show) {
+    const toggleMusicUI = (role, show) => {
         switch (role) {
             case 'conductor':
                 break;
@@ -208,7 +216,7 @@ window.room = function() {
      * place this in Benny's js file
      * send conductor key and bpm to group
      */
-    function conductorSend() {
+    const conductorSend = () => {
         let conductorKey = 'Am';//document.getElementById()...value
         let conductorBpm = 120;//document.getElementById()...value
 
@@ -224,7 +232,7 @@ window.room = function() {
      * run on music UI button
      * set "pattern" to js object of noteval:volume, noteval:volume
      */
-    function sendPattern() {
+    const sendPattern = () => {
         // let pattern = {1 :{7 : 8}, 2 : {7 : 8}, 3 : {7 : 8}, 4 : {7 : 8}, 5 : {7 : 8}, 6 : {7 : 8}, 7 : {7 : 8}, 8 : {7 : 8}};
         let pattern = 
         {
@@ -245,7 +253,7 @@ window.room = function() {
     /**
      * run in onSnapshot, 
      */
-    function readPatterns(doc) {
+    const readPatterns = (doc) => {
         if (bandState != PLAYING_MUSIC) {
             return;
         }
@@ -266,7 +274,7 @@ window.room = function() {
     /**
      * Used when a member wants to leave
      */
-    function exitBand() {
+    const exitBand = () => {
         //local stuff
         console.log('Left');
         leaveBand();
@@ -284,7 +292,7 @@ window.room = function() {
      * Updates band status to start everyone's timers
      * Triggers member assignment logic
      */
-    function beginSong() {
+    const beginSong = () => {
         //set band status to playing
         //assign member roles
         assignRoles(PLAYING_MUSIC);
@@ -294,7 +302,7 @@ window.room = function() {
     /**
      * Assign member roles and pull from database
      */
-    async function assignRoles(targetStatus) {
+    async const assignRoles = (targetStatus) => {
         if (!memberIsHost) {
             console.log('attempted to make chnages as a member, not a host')
             return;
@@ -350,7 +358,7 @@ window.room = function() {
      * Runs as soon as timer ends
      * Shows buttons for play again or quit
      */
-    function endSong() {
+    const endSong = () => {
         bandDoc.update({
             status: DONE_PLAYING
         })
@@ -360,7 +368,7 @@ window.room = function() {
     /**
      * Sends band state back to readying up for another song
      */
-    function prepPlay() {
+    const prepPlay = () => {
         assignRoles(READYING_UP);
         console.log('should show button');
     }
@@ -368,7 +376,7 @@ window.room = function() {
     /** 
      * sets band state change to end song for everyone
     */
-    function stopPlay() {
+    const stopPlay = () => {
         console.log('leaveband');
         bandDoc.update({ status: LEAVE_BAND });
     }
@@ -376,5 +384,15 @@ window.room = function() {
     //#endregion
 
     // NOTE: ADD FIELDS TO `return` STATEMENT AS NEEDED
-    return { db };
+    return { 
+        db, 
+        instruments, Member, Band,
+        music_key, music_bpm,
+        memberIsHost, getTimeRemaining, initializeClock,
+        onJoinRoom, getBandInfo, bandSnapShot,
+        toggleMusicUI, conductorSend, sendPattern, readPatterns,
+        exitBand, beginSong, assignRoles, 
+        endSong,
+        prepPlay, stopPlay
+    };
 }
