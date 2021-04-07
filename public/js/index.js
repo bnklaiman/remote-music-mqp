@@ -29,11 +29,9 @@ window.index = function() {
 		let bandInfo = document.getElementById('bandInfo');
 		bandInfo.style.visibility = 'block';
 		if (hostBool) {
-			// Create a band
 			formTitle.style.visibility = 'block';
 			formTitle.textContent = 'Create a Band';
 		} else {
-			// Join a band
 			formTitle.style.visibility = 'block';
 			formTitle.textContent = 'Join a Band';
 		}
