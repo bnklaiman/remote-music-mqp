@@ -71,13 +71,14 @@ window.index = function() {
 							music : {},
 							bpm : 60,
 							key : 'C#'
-						})/*.then(() =>//redirect host to their room
-							location.href = 'room.html'
-						)*/
+						}).then((docRef) => {
+							console.log("Band added successfully!", docRef.id);
+						}).catch((error) => {
+							console.error("Error adding band: ", error);
+						})
 					}
 				});
-		}
-		else{//member is trying to join the band instead
+		} else {//member is trying to join the band instead
 			bandInfo.style.visibility = 'none';
 			joinRef.get().then((docSnapshot) => {
 				if (docSnapshot.exists) {

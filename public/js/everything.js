@@ -753,5 +753,6 @@ window.onload = function() {
 	index = index();
 	document.getElementById('createRoom').addEventListener('click', () => index.openForm(true));
 	document.getElementById('joinRoom').addEventListener('click', () => index.openForm(false));
+	document.getElementById('enterRoom').addEventListener('click', () => index.enterRoom());
 	// console.log("We got here");
 }
