@@ -729,18 +729,24 @@ fillInNoteCell(pContext6, pCenterX6, pCenterY6, pRadius, noteColor[currentKey[6]
 fillInRestCell(pContextR, pCenterWR, pCenterHR);
 
 let currentlyPlaying = true;
+let seq = null;
+let started = false;
 function play() {
 	let noteArray = [];
 	for (const entry in globalJSON[bandName]) {
 		noteArray.push(notes[currentKey[globalJSON[bandName][entry]["value"]]] + "4");
 	}
-	const seq = new Tone.Sequence((time, note) => {
-		currentNote.name = note.slice(0, -1);
-		if (note !== "undefined4") {
-			currentInstrument.triggerAttackRelease(note, 0.1, time);
-			shapes.push(new Shape());
-		}
-	}, noteArray).start(0);
+	if (!started) {
+		// debugger;
+		seq = new Tone.Sequence((time, note) => {
+			currentNote.name = note.slice(0, -1);
+			if (note !== "undefined4") {
+				currentInstrument.triggerAttackRelease(note, 0.1, time);
+				shapes.push(new Shape());
+			}
+		}, noteArray).start(0);
+		started = true;
+	}
 	currentlyPlaying = !currentlyPlaying;
 	if (!currentlyPlaying) {
 		Tone.Transport.start();
