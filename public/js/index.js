@@ -37,6 +37,13 @@ window.index = function() {
 		}
 	}
 
+	// Returns to the Create/Join Band menu
+	const goBack = () => {
+		document.getElementById('bandInfo').style.display = 'none';
+		document.getElementById('createRoom').style.display = 'inline';
+		document.getElementById('joinRoom').style.display = 'inline';
+	}
+
 	/**
 	 * Attempts to create a new band or join existing one
 	 * Sets local storage for user and band to prep for page change
@@ -97,9 +104,9 @@ window.index = function() {
 						.update({
 							['members.' + userName] : 'none'
 						})
-						.then(() =>//redirect to the room
+						/*.then(() =>//redirect to the room
 								location.href = 'room.html'
-						)
+						)*/
 					}
 				} 
 				else {//band does not exist
@@ -123,5 +130,5 @@ window.index = function() {
 	}
 
 	//#endregion
-	return { db, onPageLoaded, openForm, enterRoom }
+	return { db, onPageLoaded, openForm, enterRoom, goBack }
 }
