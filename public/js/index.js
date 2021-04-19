@@ -59,7 +59,7 @@ window.index = function() {
 		
 		const joinRef = db.collection('Bands').doc(bandName);
 
-		if (localStorage.getItem('isHost') == 'true') {
+		if (localStorage.getItem('isHost') == 'true') {  // trying to create a band
 			bandInfo.style.visibility = 'none';
 			joinRef.get()
 				.then((docSnapshot) => {
@@ -78,11 +78,13 @@ window.index = function() {
 							music : {},
 							bpm : 60,
 							key : 'C#'
-						}).then((docRef) => {
-							console.log("Band added successfully!", docRef.id);
+						// }).then((docRef) => {
+							// console.log("Band added successfully!", docRef.id);
+							// Band added successfully
 						}).catch((error) => {
 							console.error("Error adding band: ", error);
-						})
+						});
+						document.getElementById('bandInfo').style.display = 'none';
 					}
 				});
 		} else {//member is trying to join the band instead

@@ -114,9 +114,11 @@ function playNote(instrument, note) {
 	instrument.triggerAttackRelease(note + "4", "16n");
 }
 
-// set up note playback
+// set up note playback (DEBUG)
+/*
 document.addEventListener('keydown', (event) => {
 	switch (event.code) {
+
 		case 'Digit1': playNote(synth, notes[currentKey[0]]); break;
 		case 'Digit2': playNote(synth, notes[currentKey[1]]); break;
 		case 'Digit3': playNote(synth, notes[currentKey[2]]); break;
@@ -150,6 +152,7 @@ document.addEventListener('keydown', (event) => {
 		case 'KeyM': playNote(piano, notes[currentKey[6]]); break;
 	}
 })
+*/
 
 var canvas;
 

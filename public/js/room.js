@@ -33,7 +33,7 @@ window.room = function() {
      * calculates time to target endtime
      * @param {number} endtime 
      */
-    function getTimeRemaining(endtime) {
+    const getTimeRemaining = (endtime) => {
         const total = Date.parse(endtime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
@@ -54,7 +54,7 @@ window.room = function() {
      * @param {string} id 
      * @param {number} endtime 
      */
-    function initializeClock(id, endtime, endEvent) {//to use for backend stuff set id = false, take in function for end timer event
+    const initializeClock = (id, endtime, endEvent) => {//to use for backend stuff set id = false, take in function for end timer event
         let clock;
         if (id) {
             clock = document.getElementById(id);
@@ -88,7 +88,7 @@ window.room = function() {
      * Runs as soon as member joins music room
      * Sets all global variables, except member role and bandstate
      */
-    function onJoinRoom() {
+    const onJoinRoom = () => {
         console.log('joining room');
         memberName = localStorage.getItem('user');
         bandName = localStorage.getItem('band');
@@ -114,7 +114,7 @@ window.room = function() {
     /**
      * Sets a band document listener to listen for band state
      */
-    function getBandInfo() {
+    const getBandInfo = () => {
         leaveBand = bandDoc.onSnapshot(/*{includeMetadataChanges: true},*/function (doc) {
             bandSnapShot(doc);
         })
@@ -126,7 +126,7 @@ window.room = function() {
      * Sets a band document listener to listen for band state
      * Continually updates number of members present
      */
-    function bandSnapShot(doc) {
+    const bandSnapShot = (doc) => {
         // var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
         // console.log('SnapShot activated : ', source);
         //Update display names and member Role
@@ -195,7 +195,7 @@ window.room = function() {
      * Based on role and boolean show or hide music UI
      * @param {string} role 
      */
-    function toggleMusicUI(role, show) {
+    const toggleMusicUI = (role, show) => {
         switch (role) {
             case 'conductor':
                 break;
@@ -245,7 +245,7 @@ window.room = function() {
     /**
      * run in onSnapshot, 
      */
-    function readPatterns(doc) {
+    const readPatterns = (doc) => {
         if (bandState != PLAYING_MUSIC) {
             return;
         }
@@ -266,7 +266,7 @@ window.room = function() {
     /**
      * Used when a member wants to leave
      */
-    function exitBand() {
+    const exitBand = () => {
         //local stuff
         console.log('Left');
         leaveBand();
@@ -284,7 +284,7 @@ window.room = function() {
      * Updates band status to start everyone's timers
      * Triggers member assignment logic
      */
-    function beginSong() {
+    const beginSong = () => {
         //set band status to playing
         //assign member roles
         assignRoles(PLAYING_MUSIC);
@@ -350,7 +350,7 @@ window.room = function() {
      * Runs as soon as timer ends
      * Shows buttons for play again or quit
      */
-    function endSong() {
+    const endSong = () => {
         bandDoc.update({
             status: DONE_PLAYING
         })
@@ -360,7 +360,7 @@ window.room = function() {
     /**
      * Sends band state back to readying up for another song
      */
-    function prepPlay() {
+    const prepPlay = () => {
         assignRoles(READYING_UP);
         console.log('should show button');
     }
@@ -368,7 +368,7 @@ window.room = function() {
     /** 
      * sets band state change to end song for everyone
     */
-    function stopPlay() {
+    const stopPlay = () => {
         console.log('leaveband');
         bandDoc.update({ status: LEAVE_BAND });
     }
