@@ -13,6 +13,10 @@ window.index = function() {
 	 * runs when join page starts
 	 */
 	const onPageLoaded = () => {
+		document.getElementById('music-info').style.display = 'none';
+		document.getElementById('mainRoom').style.display = 'none';
+		document.getElementById('user-controls').style.display = 'none';
+		document.getElementById('conductor-controls').style.display = 'none';
 	}
 
 	/**
@@ -78,16 +82,17 @@ window.index = function() {
 							music : {},
 							bpm : 60,
 							key : 'C#'
-						// }).then((docRef) => {
-							// console.log("Band added successfully!", docRef.id);
+						}).then((docRef) => {
 							// Band added successfully
+							document.getElementById('bandInfo').style.display = 'none';
+							document.getElementById('mainRoom').style.display = 'block';
 						}).catch((error) => {
 							console.error("Error adding band: ", error);
 						});
 						document.getElementById('bandInfo').style.display = 'none';
 					}
 				});
-		} else {//member is trying to join the band instead
+		} else {  //member is trying to join the band instead
 			bandInfo.style.visibility = 'none';
 			joinRef.get().then((docSnapshot) => {
 				if (docSnapshot.exists) {
@@ -105,7 +110,10 @@ window.index = function() {
 						joinRef//create the member under the band
 						.update({
 							['members.' + userName] : 'none'
-						})
+						});
+						document.getElementById('bandInfo').style.display = 'none';
+						document.getElementById('mainRoom').style.display = 'block';
+
 						/*.then(() =>//redirect to the room
 								location.href = 'room.html'
 						)*/

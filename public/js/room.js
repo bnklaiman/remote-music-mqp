@@ -296,7 +296,7 @@ window.room = function() {
      */
     async function assignRoles(targetStatus) {
         if (!memberIsHost) {
-            console.log('attempted to make chnages as a member, not a host')
+            console.log('attempted to make changes as a member, not as a host')
             return;
         }
 
@@ -376,5 +376,5 @@ window.room = function() {
     //#endregion
 
     // NOTE: ADD FIELDS TO `return` STATEMENT AS NEEDED
-    return { db };
+    return { db, beginSong };
 }
