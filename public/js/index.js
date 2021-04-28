@@ -9,7 +9,7 @@ window.index = function() {
 	//#region FINDING A BAND
 
 	/**
-	 * empty at the moment
+	 * definitely not empty at the moment
 	 * runs when join page starts
 	 */
 	const onPageLoaded = () => {
@@ -113,6 +113,7 @@ window.index = function() {
 						});
 						document.getElementById('bandInfo').style.display = 'none';
 						document.getElementById('mainRoom').style.display = 'block';
+						room.onJoinRoom();
 
 						/*.then(() =>//redirect to the room
 								location.href = 'room.html'
@@ -140,5 +141,13 @@ window.index = function() {
 	}
 
 	//#endregion
-	return { db, onPageLoaded, openForm, enterRoom, goBack }
+	return { 
+		db, 
+		CREATED, READYING_UP, PLAYING_MUSIC, DONE_PLAYING, LEAVE_BAND,
+		onPageLoaded, openForm, enterRoom, goBack 
+	}
+}
+
+window.onload = function() {
+	room = room();
 }

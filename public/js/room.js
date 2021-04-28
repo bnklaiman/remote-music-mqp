@@ -376,5 +376,15 @@ window.room = function() {
     //#endregion
 
     // NOTE: ADD FIELDS TO `return` STATEMENT AS NEEDED
-    return { db, beginSong };
+    return { 
+        db,
+        CREATED, READYING_UP, PLAYING_MUSIC, DONE_PLAYING, LEAVE_BAND,
+        instruments, memberName, memberRole,
+        bandName, bandDoc, bandState, leaveBand,
+        music_key, music_bpm, memberIsHost,
+        
+        getTimeRemaining, initializeClock, onJoinRoom, getBandInfo,
+        bandSnapShot, toggleMusicUI, conductorSend, sendPattern, readPatterns,
+        exitBand, beginSong, assignRoles, endSong, prepPlay, stopPlay 
+    };
 }
