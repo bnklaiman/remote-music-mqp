@@ -86,6 +86,7 @@ window.index = function() {
 							// Band added successfully
 							document.getElementById('bandInfo').style.display = 'none';
 							document.getElementById('mainRoom').style.display = 'block';
+							room.onJoinRoom();
 						}).catch((error) => {
 							console.error("Error adding band: ", error);
 						});
@@ -111,6 +112,7 @@ window.index = function() {
 						.update({
 							['members.' + userName] : 'none'
 						});
+						document.getElementById('nextGame').style.display = 'none';
 						document.getElementById('bandInfo').style.display = 'none';
 						document.getElementById('mainRoom').style.display = 'block';
 						room.onJoinRoom();

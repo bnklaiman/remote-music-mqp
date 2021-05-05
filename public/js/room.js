@@ -145,7 +145,11 @@ window.room = function() {
             document.getElementById('allMembers').innerHTML += displayRole + memberslist[i] + "<br>";
         }
 
-        document.getElementById('instrument').textContent = `You are the ${memberRole}`;
+        if (localStorage.getItem('isHost') == 'true') {
+            document.getElementById('instrument').textContent = `You are the conductor. Start whenever you're ready!`;    
+        } else {
+            document.getElementById('instrument').textContent = `You are the ${memberRole}. Waiting for the conductor to begin...`;
+        }
         bandDoc.update({ groupSize: memberslist.length, })
             .then(function () {
                 //Band State changes
