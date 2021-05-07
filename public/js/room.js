@@ -176,7 +176,7 @@ window.room = function() {
                             //clock stuff
                             const minutes = .1;
                             const currentTime = Date.parse(new Date());
-                            const deadline = new Date(currentTime + minutes * 60 * 1000);
+                            const deadline = new Date(currentTime + minutes * 100 * 1000);
                             initializeClock('clockdiv', deadline, endSong);
                             break;
                         case DONE_PLAYING:

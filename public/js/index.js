@@ -97,7 +97,11 @@ window.index = function() {
 			bandInfo.style.visibility = 'none';
 			joinRef.get().then((docSnapshot) => {
 				if (docSnapshot.exists) {
-					if (docSnapshot.data().members > 4) {//limit to 4 members
+					let memberCount = 0;
+					for (member in docSnapshot.data().members) {
+						memberCount++;
+					}
+					if (memberCount > 3) {//limit to 4 members
 						const errorRoom = document.getElementById('errorRoom');
 						errorRoom.style.display = 'block';
 						errorRoom.textContent = 'This band has too many members - try another one';
