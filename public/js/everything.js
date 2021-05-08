@@ -768,4 +768,6 @@ window.onload = function() {
 	document.getElementById('back').addEventListener('click', () => index.goBack());
 	
 	document.getElementById('hostStart').addEventListener('click', () => room.beginSong());
+	document.getElementById('play-another').addEventListener('click', () => room.prepPlay());
+	document.getElementById('exit').addEventListener('click', () => room.stopPlay());
 }

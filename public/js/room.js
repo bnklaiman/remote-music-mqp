@@ -202,9 +202,19 @@ window.room = function() {
     const toggleMusicUI = (role, show) => {
         switch (role) {
             case 'conductor':
+                if (show) {
+                    document.getElementById('conductor-controls').style.display = 'block';
+                } else {
+                    document.getElementById('conductor-controls').style.display = 'none';
+                }
                 break;
             default:
                 // TODO - if true, then show the music stuff, if false hide the music stuff
+                if (show) {
+                    document.getElementById('user-controls').style.display = 'block';
+                } else {
+                    document.getElementById('user-controls').style.display = 'none';
+                }
         }
     }
 
@@ -275,7 +285,10 @@ window.room = function() {
         console.log('Left');
         leaveBand();
         localStorage.clear();
-        location.href = 'index.html';
+        // location.href = 'index.html';
+        document.getElementById('mainRoom').style.display = 'none';
+        document.getElementById('createRoom').style.display = 'inline';
+		document.getElementById('joinRoom').style.display = 'inline';
     }
 
 
